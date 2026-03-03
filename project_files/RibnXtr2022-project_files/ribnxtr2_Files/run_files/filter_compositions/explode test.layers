@@ -1,0 +1,92 @@
+TIME_ID:2017_9_29_11_22_17_
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 0
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 1
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 1: 0
+main_BrightnessFilterMode: 0: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: LayerMaskExplodeSegmentationRegionFilter
+prm_inverse: 0: 0
+prm_Mode: 1: 0
+prm_lth: 0: 0
+prm_rth: 10000: 0
+prm_sampling3DMode: 0: 0
+prm_autoThreshold: 1: 0
+prm_showMask: 0: 0
+prm_segOpacity: 0.556: 0
+prm_showStats: 0: 0
+prm_radiusX: 16.18: 1
+prm_radiusY: 22.82: 1
+prm_radiusZ: 23.94: 1
+prm_angle: 0: 0
+prm_dest: 103: 0
+prm_maxDist: 512: 1
+prm_median: 1: 1
+prm_medianFactor: 1: 0
+prm_medianKernel: 1: 0
+prm_medianKernel3D: 36: 1
+prm_dest3D: 6: 1
+prm_medianThreshold: 10: 0
+prm_ktype: 0: 0
+prm_dilateDist: 5: 0
+prm_closingSize3D: 2: 1
+prm_useBigMask: 0: 0
+prm_bigMaskMode: 0: 0
+prm_propPercentCoarse: 0.5: 1
+prm_propPercentFine: 0: 1
+prm_sigma: 1.5: 1
+prm_intensityFactor: 0.5: 0
+prm_onlyShortening: 0: 0
+prm_ellipseRayDest: 0: 0
+prm_showContour1Points: 0: 0
+prm_drawFonts: 1: 0
+prm_infoType: 0: 0
+prm_r1: 255: 0
+prm_g1: 255: 0
+prm_b1: 255: 0
+prm_fontSize: 15: 0
+prm_showInfoPlace: 1: 0
+LAYER_END: 
+
+

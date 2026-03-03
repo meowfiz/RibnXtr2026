@@ -1,0 +1,3 @@
+base:
+  seed: 80
+  epochs: 100

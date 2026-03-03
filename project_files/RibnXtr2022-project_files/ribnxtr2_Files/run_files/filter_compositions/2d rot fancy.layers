@@ -1,0 +1,68 @@
+TIME_ID:2017_10_20_14_8_19_
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 0
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 1
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 1
+main_FilterInverse: 0: 1
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 0: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+LAYER_FILTER_NAME: StatisticalDirectionalFilter
+prm_radius1: 1: 0
+prm_radius2: 4: 1
+prm_type: 11: 0
+prm_finalValue: 1: 0
+prm_testWeight: 0.99998: 0
+prm_testWeight1: 1: 0
+prm_rot parts: 5: 0
+prm_startAngle: 104: 1
+prm_minFunc: 1: 0
+prm_finalValMode: 0: 0
+prm_stdDevThresh: 0: 0
+prm_valThresh: 0: 0
+prm_maskFromPrevLayer: 0: 0
+prm_maskPrevThresh: 0: 0
+prm_superTest: 0: 0
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0
+LAYER_END: 
+
+

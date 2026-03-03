@@ -1,0 +1,137 @@
+TIME_ID:2022_9_10_10_40_7_
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 0
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+main_RememberBuffer: 0: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: median
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 1: 1
+main_BrightnessFilterMode: 0: 0
+main_RememberBuffer: 0: 0
+LAYER_FILTER_NAME: LayerMedianFilter
+prm_radius: 2: 1
+prm_kerenl type: 0: 1
+prm_mode: 0: 0
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 1
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: island
+CHILD_MODE: 0
+DATASET_NUMBER: -2
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 1: 0
+main_BrightnessFilterMode: 0: 0
+main_RememberBuffer: 0: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskIslandFilter
+prm_inverse: 0: 0
+prm_lefthTh: 0: 1
+prm_rightthTh: 24.02: 1
+prm_minArea: 15536: 1
+prm_maxArea: 26344: 1
+prm_minWidth: 0: 1
+prm_maxWidth: 267: 1
+prm_minHeight: 0: 1
+prm_maxHeight: 0: 1
+prm_shape: 2: 1
+prm_tolerance: 0.283: 1
+prm_showOrigBounds: 0: 1
+prm_showFittedBounds: 1: 1
+prm_showFittedAxes: 1: 1
+prm_showFittedEllipse: 0: 1
+prm_showContourPoints: 1: 1
+prm_morphology: 0: 1
+prm_ktype: 0: 1
+prm_drawFonts: 1: 1
+prm_CleanShapes: 1: 1
+prm_useStartShapes: 0: 1
+prm_infoType: 8: 1: 0: 170: 255
+prm_fontSize: 15: 1
+prm_showInfoPlace: 5: 1
+prm_globalX: -60: 1
+prm_globalY: -29: 1
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: top layer
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+main_RememberBuffer: 0: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0
+LAYER_END: 
+
+

@@ -1,0 +1,101 @@
+TIME_ID:2018_1_22_22_18_41_
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 0
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+main_RememberBuffer: 0: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 1
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 0: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 0: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+main_RememberBuffer: 0: 0
+LAYER_FILTER_NAME: LayerGrowingRegionFilter
+prm_multiFront: 0: 1
+prm_multiSeed: 0: 0
+prm_findEndPoints: 0: 0
+prm_don't Calculate2D: 1: 1
+prm_multiply: 19297: 1
+prm_mcValue: 0.01: 0
+prm_GrowFromPoint: 1: 1
+prm_showDebug: 0: 0
+prm_Mode: 1: 1
+prm_lth: 0: 0
+prm_rth: 10000: 0
+prm_autoThreshold: 1: 1
+prm_thresholdAddLeft: 0: 1
+prm_thresholdAddRight: 0: 1
+prm_blockSmallFronts: 1: 1
+prm_minSizeToBlock: 0: 1
+prm_maxSizeToBlock: 0: 1
+prm_nrOfChecks: 3: 1
+prm_sampling3DMode: 2: 1
+prm_showStats: 0: 1
+prm_radiusX: 2: 1
+prm_radiusY: 2: 1
+prm_radiusZ: 2: 1
+prm_maxVolume: 5: 1
+prm_maxDist: 256: 1
+prm_ktype: 0: 1
+prm_dilateSize: 0: 1
+prm_ClosingSize: 1: 1
+prm_showFrontNr: 1: 0
+prm_useBigMask: 1: 0
+prm_bigMaskMode: 0: 0
+prm_propPercentCoarse: 0.11: 1
+prm_propPercentFine: 0: 1
+prm_sigma: 3.07: 1
+prm_intensityFactor: 0.5: 0
+prm_drawFonts: 1: 0
+prm_endPointRadius: 0.0098: 0
+prm_infoType: 0: 0
+prm_r1: 255: 0
+prm_g1: 255: 0
+prm_b1: 255: 0
+prm_r2: 255: 0
+prm_g2: 255: 0
+prm_b2: 255: 0
+prm_fontSize: 15: 0
+prm_showInfoPlace: 0: 0
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0
+LAYER_END: 
+
+

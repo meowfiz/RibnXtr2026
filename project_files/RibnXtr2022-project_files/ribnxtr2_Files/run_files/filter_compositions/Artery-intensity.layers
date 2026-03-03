@@ -1,0 +1,63 @@
+TIME_ID:2021_1_23_21_13_3_
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 0
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+main_RememberBuffer: 0: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 1
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+main_RememberBuffer: 0: 0
+LAYER_FILTER_NAME: IntensitySimpleFilter
+prm_brightness: 0: 1
+prm_contrast: 150: 1
+prm_highlightsID: -1.14: 1
+prm_midtonesID: -12.5: 1
+prm_shadowsID: -82.95: 1
+prm_useGlobalThresholds: 0: 0
+prm_drawHistogram: 1: 1
+prm_view: 0: 0
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0: 0: 0: 1959387040
+LAYER_END: 
+
+

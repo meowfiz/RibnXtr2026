@@ -1,0 +1,133 @@
+TIME_ID:2021_1_23_15_44_15_
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 0
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+main_RememberBuffer: 0: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 1
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 0: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1.01: 0
+main_Addition: 0: 0
+main_AutoNormalize: 0: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+main_RememberBuffer: 0: 0
+LAYER_FILTER_NAME: LayerGrowingRegionFilter
+prm_segmentMode: 0: 1: 85: 170: 255
+prm_fillGaps: 0: 0
+prm_multiFront: 0: 1: 0: 0: 0
+prm_multiSeed: 1: 1: 0: 0: 0
+prm_findEndPoints: 1: 1: 0: 0: 0
+prm_don't Calculate2D: 1: 0
+prm_multiply: 19297: 0
+prm_mcValue: 26.54: 0
+prm_GrowFromPoint: 0: 1: 0: 0: 0
+prm_GrowFromClickedOnly: 2: 1: 0: 0: 0
+prm_useMasksForAneurysmInit: 0: 1: 0: 0: 0
+prm_showDebug: 0: 0
+prm_Mode: 0: 1: 0: 0: 0
+prm_lth: 119: 1: 0: 0: 0
+prm_rth: 10000: 1: 0: 0: 0
+prm_autoThreshold: 1: 1: 0: 0: 0
+prm_useGlobalThresholds: 1: 1: 0: 0: 0
+prm_thresholdAddLeft: 0: 0
+prm_thresholdAddRight: 0: 0
+prm_minLeafLength: 0.97: 0
+prm_blockSmallFronts: 0: 0
+prm_minSizeToBlock: 0: 0
+prm_maxSizeToBlock: 444: 0
+prm_minEndPointFrontSize: 0: 0
+prm_nrOfChecks: 2: 0
+prm_sampling3DMode: 2: 0
+prm_angleTestDist: 0: 0
+prm_angleTestAngle: 160: 0
+prm_kernelSkelSearchSize: 4: 0
+prm_cutSkelFromBegining: 0: 0
+prm_cutSkelThresh: 0: 0
+prm_connectCloseEndPoints: 0: 0
+prm_connectSkelAndJoints: 1: 0
+prm_generateEndPointsBalls: 1: 0
+prm_generateTracingSkeletons: 0: 0
+prm_dontRemoveDistMap: 1: 0
+prm_showAdvGlyph: 0: 0
+prm_drawMode: 0: 0
+prm_showBreakGlyph: 0: 0
+prm_showStats: 0: 0
+prm_SphereRadiusX: 1: 0
+prm_radiusX: 50: 1: 255: 170: 0
+prm_radiusY: 50: 0
+prm_radiusZ: 50: 0
+prm_maxVolume: 0: 1: 0: 0: 0
+prm_maxDist: 500: 1: 0: 0: 0
+prm_EuclidMaxDist: 0: 1: 255: 85: 255
+prm_histSmplSize: 2: 1: 85: 170: 127
+prm_deltaStdDev: 80: 1: 85: 170: 0
+prm_histSimilarityMode: 0: 0
+prm_histSimilarityThreshold: 1: 1: 170: 255: 255
+prm_hist2DSimilarityThreshold: 0: 1: 0: 170: 127
+prm_nrOfHistBins: 5: 1: 0: 0: 0
+prm_minVolForPoint: 10: 0
+prm_morphKernelType: 0: 0
+prm_morphKernelSize: 1: 0
+prm_morph2D: 0: 1: 0: 0: 0
+prm_Erode/Dilate: 0: 1: 0: 0: 0
+prm_Opening/Closing: 0: 1: 85: 170: 255
+prm_showFrontNr: 1: 0
+prm_useBigMask: 1: 0
+prm_bigMaskMode: 0: 0
+prm_propPercentCoarse: 0.41: 1: 0: 0: 0
+prm_propPercentFine: 0: 1: 0: 0: 0
+prm_sigma: 3.24: 1: 0: 0: 0
+prm_intensityFactor: 0.267: 1: 0: 0: 0
+prm_drawFonts: 1: 0
+prm_endPointRadius: 0.2991: 0
+prm_infoType: 0: 0
+prm_r1: 255: 0
+prm_g1: 255: 0
+prm_b1: 255: 0
+prm_r2: 255: 0
+prm_g2: 255: 0
+prm_b2: 255: 0
+prm_fontSize: 4: 0
+prm_showInfoPlace: 0: 0
+prm_drawHistogram: 0: 0
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0
+LAYER_END: 
+
+

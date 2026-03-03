@@ -1,0 +1,6 @@
+transform:
+  - resize:
+      size: [256, 256]
+      interpolation: bilinear
+
+  - to_tensor: {}

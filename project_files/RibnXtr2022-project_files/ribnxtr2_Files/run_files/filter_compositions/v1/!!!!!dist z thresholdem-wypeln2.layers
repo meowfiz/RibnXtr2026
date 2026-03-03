@@ -1,0 +1,92 @@
+TIME_ID:2016_10_14_13_32_57_
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 0
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_ENABLED: 0
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: MaskLinearBlendFilter
+prm_orientation: 0: 1
+prm_position: 0: 1
+prm_width: 0: 1
+prm_inverse: 0: 1
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 1
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 1
+LAYER_FILTER_NAME: DistanceTransformFilter
+prm_scaleFactor: 123.82: 0
+prm_thresholdLeft: 0: 0
+prm_thresholdRight: 100: 0
+prm_inverseThresh: 0: 0
+prm_fillGapsFromDistance: 1: 0
+prm_use Mask Settings: 1: 0
+
+MASK_ENABLED: 1
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: MaskThresholdFilter
+prm_thresholdLeft: 0: 1
+prm_thresholdRight: 40: 1
+prm_inverse: 1: 1
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 1
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: -2
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 0.698039
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 1
+LAYER_FILTER_NAME: GaussianFilter
+prm_radius: 13: 0
+prm_stddev: 0.28: 0
+prm_useWeightMap: 0: 0
+prm_amount: 1: 0
+prm_invertWeights: 0: 0
+
+MASK_ENABLED: 0
+MASK_NUMBER: 1
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 1: 1
+LAYER_END: 
+
+

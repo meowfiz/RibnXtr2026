@@ -1,0 +1,120 @@
+TIME_ID:2016_10_7_14_5_39_
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 0
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_ENABLED: 0
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: MaskLinearBlendFilter
+prm_orientation: 0: 1
+prm_position: 0: 1
+prm_width: 0: 1
+prm_inverse: 0: 1
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 1
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 1
+LAYER_FILTER_NAME: GaussianFilter
+prm_radius: 2: 1
+prm_stddev: 0.3: 1
+prm_useWeightMap: 0: 0
+prm_amount: 1: 0
+prm_invertWeights: 0: 0
+
+MASK_ENABLED: 0
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: MaskLinearBlendFilter
+prm_orientation: 0: 1
+prm_position: 0: 1
+prm_width: 0: 1
+prm_inverse: 0: 1
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 2
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: -2
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_ENABLED: 1
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: LayerMaskExplodeSegmentationRegionFilter
+prm_inverse: 0: 1
+prm_Mode: 1: 1
+prm_lth: 0: 1
+prm_rth: 4096: 1
+prm_samplingType: 0: 0
+prm_showMask: 0: 1
+prm_segOpacity: 0.5: 1
+prm_calculateStats: 0: 1
+prm_radius1: 2: 0
+prm_radius2: 2: 1
+prm_angle: 55: 1
+prm_dest: 50: 1
+prm_maxDist: 176: 1
+prm_median: 1: 0
+prm_medianFactor: 1: 0
+prm_medianKernel: 2: 0
+prm_medianThreshold: 10: 0
+prm_ktype: 0: 1
+prm_dilateDist: 2: 1
+prm_useBigMask: 1: 0
+prm_bigMaskMode: 0: 0
+prm_propPercentCoarse: 0.7: 0
+prm_propPercentFine: 0.0371: 0
+prm_sigma: 1.49: 0
+prm_intensityFactor: 0.182: 0
+prm_onlyShortening: 1: 0
+prm_ellipseRayDest: 1: 0
+prm_showContour1Points: 0: 0
+prm_drawFonts: 1: 1
+prm_infoType: 0: 1
+prm_r1: 255: 0
+prm_g1: 255: 0
+prm_b1: 255: 0
+prm_fontSize: 15: 0
+LAYER_END: 
+
+

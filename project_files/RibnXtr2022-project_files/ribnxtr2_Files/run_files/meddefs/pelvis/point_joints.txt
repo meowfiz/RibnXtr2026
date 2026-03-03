@@ -1,0 +1,86 @@
+plane_finder:
+
+SPINE GROUP_left GROUP_right REFERENCE_POINT_FRONT REFERENCE_POINT_BACK  ALTERNATIVE_CENTER_FRONT ALTERNATIVE_CENTER_BACK
+
+
+lines:
+
+
+SPINE_P0 SPINE_P1
+SPINE_P0 SPINE_PA
+SPINE_P0 SPINE_PB
+SPINE_P0 SPINE_CENTER
+
+
+
+
+CENTER_B_left CENTER_B_right
+CENTER_B_left CENTER_L_left
+CENTER_B_left CENTER_L_right
+CENTER_B_left CENTER_K_left
+CENTER_B_left CENTER_K_right
+
+CENTER_B_right CENTER_L_left
+CENTER_B_right CENTER_L_right
+CENTER_B_right CENTER_K_left
+CENTER_B_right CENTER_K_right
+
+CENTER_L_left CENTER_L_right
+CENTER_L_left CENTER_K_left
+CENTER_L_left CENTER_K_right
+
+CENTER_L_right CENTER_K_left
+CENTER_L_right CENTER_K_right
+
+CENTER_K_left CENTER_K_right
+
+
+
+
+triangles:
+
+CENTER_B_left CENTER_B_right CENTER_L_left
+CENTER_B_left CENTER_B_right CENTER_L_right
+CENTER_B_left CENTER_B_right CENTER_K_left
+CENTER_B_left CENTER_B_right CENTER_K_right
+CENTER_B_left CENTER_L_left CENTER_L_right
+CENTER_B_left CENTER_L_left CENTER_K_left
+CENTER_B_left CENTER_L_left CENTER_K_right
+CENTER_B_left CENTER_L_right CENTER_K_left
+CENTER_B_left CENTER_L_right CENTER_K_right
+CENTER_B_left CENTER_K_left CENTER_K_right
+
+CENTER_B_right CENTER_L_left CENTER_L_right
+CENTER_B_right CENTER_L_left CENTER_K_left
+CENTER_B_right CENTER_L_left CENTER_K_right
+CENTER_B_right CENTER_L_right CENTER_K_left
+CENTER_B_right CENTER_L_right CENTER_K_right
+CENTER_B_right CENTER_K_left CENTER_K_right
+
+CENTER_L_left CENTER_L_right CENTER_K_left
+CENTER_L_left CENTER_L_right CENTER_K_right 
+CENTER_L_left CENTER_K_left CENTER_K_right
+
+CENTER_L_right CENTER_K_left CENTER_K_right
+
+
+
+
+
+
+
+planes:
+
+SPINE_PLANE_X SPINE_P0 SPINE_P1 SPINE_PA
+CENTER_B_left CENTER_B_right CENTER_L_left CENTER_L_right CENTER_K_left CENTER_K_right
+
+SPINE_PLANE_Y SPINE_P0 SPINE_P1 SPINE_PB
+CENTER_B_left CENTER_B_right CENTER_L_left CENTER_L_right CENTER_K_left CENTER_K_right
+
+SPINE_PLANE_Z SPINE_P0 SPINE_PA SPINE_PB
+CENTER_B_left CENTER_B_right CENTER_L_left CENTER_L_right CENTER_K_left CENTER_K_right
+
+
+base_planes:
+
+SPINE_SYSTEM SPINE_P0 SPINE_P1 SPINE_PA SPINE_PB -2

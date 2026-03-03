@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+     This shader implements Phong shading.  Phong shading is equivalent to
+     the Gouraud implemented by the standard OpenGL pipeline except that
+     instead of doing lighting caluclations on vertices and interpolating
+     colors, normals are interpolated and lighting is performed per fragment.
+     This can result in a much smoother surface.
+
+ Copyright 2006 Sandia Corporation.
+ Under the terms of Contract DE-AC04-94AL85000, there is a non-exclusive
+ license for use of this work by or on behalf of the
+ U.S. Government. Redistribution and use in source and binary forms, with
+ or without modification, are permitted provided that this Notice and any
+ statement of authorship are reproduced on all copies.
+-->
+
+
+<Material name="Phong"
+          number_of_properties="0"
+          number_of_vertex_shaders="1"
+          number_of_fragment_shaders="1">
+
+  <Shader scope="Vertex"
+          name="PhongVert"
+          location="Inline"
+          language="GLSL"
+          entry="main">
+/* This is a vertex program for phong shading.  Since the lighting is done
+ * in the fragment shader, it basically just transforms the vertices and
+ * passes the lighting parameters.
+ */
+
+/*
+ * Copyright 2006 Sandia Corporation.
+ * Under the terms of Contract DE-AC04-94AL85000, there is a non-exclusive
+ * license for use of this work by or on behalf of the
+ * U.S. Government. Redistribution and use in source and binary forms, with
+ * or without modification, are permitted provided that this Notice and any
+ * statement of authorship are reproduced on all copies.
+ */
+
+attribute vec3 Tangent;
+attribute vec3 Binormal;
+
+uniform vec3 LightDir;  // Light direction in eye coordinates
+uniform vec4 ViewPosition;
+
+varying vec3 N, L, H, R, T, B;
+
+void main() 
+{
+    vec3 V, eyeDir;
+    vec4 pos;
+       
+    pos    = gl_ModelViewMatrix * gl_Vertex;
+    eyeDir = pos.xyz;
+    
+    N = normalize(gl_NormalMatrix * gl_Normal);
+    L = normalize(LightDir);
+    V = normalize((gl_ModelViewMatrix * ViewPosition).xyz - pos.xyz);
+    H = normalize(L + V);
+    R = normalize(reflect(eyeDir, N));
+    T = normalize(gl_NormalMatrix * Tangent);
+    B = normalize(gl_NormalMatrix * Binormal);
+    
+    gl_Position = ftransform();
+}
+
+  </Shader>
+
+  <Shader scope="Fragment"
+          name="PhongFrag"
+          location="Inline"
+          language="GLSL"
+          entry="main">
+    <LightUniform name="NumLights" value="NumberOfLights"/>
+/* This is a fragment program for phong shading.
+ *
+ * This shader performs 2 sided lighting, but assumes that all lights are
+ * directional (changing that would be pretty easy to fix).
+ *
+ * This shader supports up to 5 lights.  The number 5 was picked because that is
+ * how many lights are created by light kit.
+ *
+ * This shader does not support mapping scalars to colors.  You need to make
+ * custom variations of the shader to either do texture lookups or to
+ * replace the diffuse term with gl_Color.
+ */
+
+/*
+ * Copyright 2006 Sandia Corporation.
+ * Under the terms of Contract DE-AC04-94AL85000, there is a non-exclusive
+ * license for use of this work by or on behalf of the
+ * U.S. Government. Redistribution and use in source and binary forms, with
+ * or without modification, are permitted provided that this Notice and any
+ * statement of authorship are reproduced on all copies.
+ */
+
+const float PI = 3.14159;
+const float ONE_OVER_PI = 1.0 / PI;
+
+uniform vec4 SurfaceColor; // Base color of surface
+uniform vec2 P;            // Diffuse (x) and specular reflectance (y)
+uniform vec2 A;            // Slope distribution in x and y
+uniform vec3 Scale;        // Scale factors for intensity computation
+
+varying vec3 N, L, H, R, T, B;
+
+void main()
+{
+    float e1, e2, E, cosThetaI, cosThetaR, brdf, intensity;   
+     
+    e1 = dot(H, T) / A.x;
+    e2 = dot(H, B) / A.y;
+    E = -2.0 * ((e1 * e1 + e2 * e2) / (1.0 + dot(H, N)));
+    
+    cosThetaI = dot(N, L);
+    cosThetaR = dot(N, R);
+    
+    brdf = P.x * ONE_OVER_PI + 
+           P.y * (1.0 / sqrt(cosThetaI * cosThetaR)) *
+           (1.0 / (4.0 * PI * A.x * A.y)) * exp(E);
+                
+    intensity = Scale[0] * P.x * ONE_OVER_PI +
+                Scale[1] * P.y * cosThetaI * brdf + 
+                Scale[2] * dot(H, N) * P.y;
+                
+    vec3 color = intensity * SurfaceColor.rgb;
+    
+    gl_FragColor = vec4(color, 1.0);
+}
+
+  </Shader>
+</Material>

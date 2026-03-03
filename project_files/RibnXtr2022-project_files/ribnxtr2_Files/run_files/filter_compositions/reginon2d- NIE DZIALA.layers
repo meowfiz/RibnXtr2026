@@ -1,0 +1,163 @@
+TIME_ID:2021_1_5_14_54_41_
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 0
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+main_RememberBuffer: 0: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 1
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+main_RememberBuffer: 0: 0
+LAYER_FILTER_NAME: LayerMedianFilter
+prm_radius: 4: 0
+prm_kerenl type: 0: 0
+prm_mode: 0: 0
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 2
+CHILD_MODE: 0
+DATASET_NUMBER: -2
+main_Opacity: 0.59: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+main_RememberBuffer: 0: 0
+LAYER_FILTER_NAME: LayerGrowingRegionFilter
+prm_segmentMode: 0: 0
+prm_fillGaps: 0: 0
+prm_multiFront: 1: 0
+prm_multiSeed: 0: 0
+prm_findEndPoints: 0: 0
+prm_don't Calculate2D: 0: 0
+prm_multiply: 1: 0
+prm_mcValue: 0.01: 0
+prm_GrowFromPoint: 0: 0
+prm_GrowFromClickedOnly: 0: 0
+prm_useMasksForAneurysmInit: 0: 0
+prm_showDebug: 0: 0
+prm_Mode: 1: 0
+prm_lth: 0: 0
+prm_rth: 10000: 0
+prm_autoThreshold: 1: 0
+prm_useGlobalThresholds: 0: 0
+prm_thresholdAddLeft: 0: 0
+prm_thresholdAddRight: 0: 0
+prm_minLeafLength: 6: 0
+prm_blockSmallFronts: 0: 0
+prm_minSizeToBlock: 0: 0
+prm_maxSizeToBlock: 0: 0
+prm_minEndPointFrontSize: 0: 0
+prm_nrOfChecks: 3: 0
+prm_sampling3DMode: 0: 0
+prm_angleTestDist: 0: 0
+prm_angleTestAngle: 120: 0
+prm_kernelSkelSearchSize: 3: 0
+prm_cutSkelFromBegining: 0: 0
+prm_cutSkelThresh: 0: 0
+prm_connectCloseEndPoints: 0: 0
+prm_connectSkelAndJoints: 0: 0
+prm_generateEndPointsBalls: 0: 0
+prm_generateTracingSkeletons: 0: 0
+prm_dontRemoveDistMap: 0: 0
+prm_showAdvGlyph: 0: 0
+prm_drawMode: 1: 0
+prm_showBreakGlyph: 0: 0
+prm_showStats: 0: 0
+prm_SphereRadiusX: 0: 0
+prm_radiusX: 17.84: 0
+prm_radiusY: 23.94: 0
+prm_radiusZ: 0.1: 0
+prm_maxVolume: 0: 0
+prm_maxDist: 775: 0
+prm_EuclidMaxDist: 0: 0
+prm_histSmplSize: 1: 0
+prm_deltaStdDev: 0: 0
+prm_histSimilarityMode: 0: 0
+prm_histSimilarityThreshold: 0: 0
+prm_hist2DSimilarityThreshold: 0: 0
+prm_nrOfHistBins: 5: 0
+prm_minVolForPoint: 10: 0
+prm_morphKernelType: 0: 0
+prm_morphKernelSize: 1: 0
+prm_morph2D: 0: 0
+prm_Erode/Dilate: 0: 0
+prm_Opening/Closing: 0: 0
+prm_showFrontNr: 1: 0
+prm_useBigMask: 1: 0
+prm_bigMaskMode: 0: 0
+prm_propPercentCoarse: 0.11: 0
+prm_propPercentFine: 0.0333: 0
+prm_sigma: 6: 0
+prm_intensityFactor: 0.5: 0
+prm_drawFonts: 1: 0
+prm_endPointRadius: 0.0076: 0
+prm_infoType: 0: 0
+prm_r1: 255: 0
+prm_g1: 255: 0
+prm_b1: 255: 0
+prm_r2: 255: 0
+prm_g2: 255: 0
+prm_b2: 255: 0
+prm_fontSize: 15: 0
+prm_showInfoPlace: 1: 0
+prm_drawHistogram: 0: 0
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0
+LAYER_END: 
+
+

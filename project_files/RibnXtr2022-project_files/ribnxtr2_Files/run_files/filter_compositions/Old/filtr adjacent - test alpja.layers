@@ -1,0 +1,160 @@
+TIME_ID:2014_3_6_14_39_53_
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 0
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: 1
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 0
+LAYER_FILTER_NAME: EmptyFilter
+prm_temporal average: 0
+
+MASK_ENABLED: 0
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: MaskLinearBlendFilter
+prm_orientation: 0
+prm_position: 0
+prm_width: 0
+prm_inverse: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 1
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: 1
+USE_MIXED_RESULT: 1
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 1
+LAYER_FILTER_NAME: AnisotropicDiffusionFilter
+prm_C Function: 0
+prm_iter: 2
+prm_K0: 5
+prm_a: 10
+prm_dt: 0.181
+prm_temporal average: 0
+
+MASK_ENABLED: 0
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: LayerMaskAdjacentRegionFilter
+prm_inverse: 0
+prm_lefthTh_1: 0
+prm_rightthTh_1: 35.48
+prm_lefthTh_2: 0
+prm_rightthTh_2: 93.13
+prm_minArea: 0
+prm_maxArea: 0
+prm_minWidth: 0
+prm_maxWidth: 0
+prm_minHeight: 0
+prm_maxHeight: 0
+prm_showContour1Points: 0
+prm_showContour2Points: 1
+prm_ktype: 1
+prm_drawFonts: 1
+prm_CleanShapes: 1
+prm_infoType: 6
+prm_r1: 255
+prm_g1: 0
+prm_b1: 53
+prm_r2: 31
+prm_g2: 180
+prm_b2: 11
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 1
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: -2
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 1
+LAYER_FILTER_NAME: EmptyFilter
+prm_temporal average: 0
+
+MASK_ENABLED: 1
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: LayerMaskAdjacentRegionFilter
+prm_inverse: 0
+prm_lefthTh_1: 0
+prm_rightthTh_1: 48.78
+prm_lefthTh_2: 75.39
+prm_rightthTh_2: 243.91
+prm_minArea: 0
+prm_maxArea: 0
+prm_minWidth: 0
+prm_maxWidth: 0
+prm_minHeight: 0
+prm_maxHeight: 0
+prm_showContour1Points: 1
+prm_showContour2Points: 1
+prm_ktype: 1
+prm_drawFonts: 1
+prm_CleanShapes: 0
+prm_infoType: 0
+prm_r1: 255
+prm_g1: 255
+prm_b1: 0
+prm_r2: 255
+prm_g2: 64
+prm_b2: 255
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 2
+LAYER_ENABLED: 0
+CHILD_MODE: 0
+DATASET_NUMBER: 1
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 0
+LAYER_FILTER_NAME: EmptyFilter
+prm_temporal average: 0
+
+MASK_ENABLED: 0
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: MaskLinearBlendFilter
+prm_orientation: 0
+prm_position: 0
+prm_width: 0
+prm_inverse: 0
+LAYER_END: 
+
+

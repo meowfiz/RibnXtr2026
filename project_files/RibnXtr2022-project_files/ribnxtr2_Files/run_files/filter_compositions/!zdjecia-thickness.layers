@@ -1,0 +1,109 @@
+TIME_ID:2021_1_15_12_43_1_
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 0
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+main_RememberBuffer: 0: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 1
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 1: 0
+main_BrightnessFilterMode: 0: 0
+main_RememberBuffer: 0: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: LayerMaskThicknessAnalysisFilter
+prm_samplingThickness: 5: 0: 0: 0: 0
+prm_ClosingProbMap: 0: 0: 0: 0: 0
+prm_leftInputCutt: 15.827: 1: 255: 255: 0
+prm_rightInputCutt: 76.259: 1: 170: 170: 255
+prm_autoThreshold: 1: 0: 0: 0: 0
+prm_median: 1: 0: 0: 0: 0
+prm_medianFactor: 0.173: 0: 0: 0: 0
+prm_medianKernel: 1: 0: 0: 0: 0
+prm_removeCollisions: 1: 0: 0: 0: 0
+prm_removeAllCollisions: 1: 0: 0: 0: 0
+prm_improveCollision: 1: 0: 0: 0: 0
+prm_useProbMap: 1: 0: 0: 0: 0
+prm_IntensityStats: 1: 0: 0: 0: 0
+prm_leftIntensTh: 33: 0: 0: 0: 0
+prm_rightIntensTh: 66: 0: 0: 0: 0
+prm_propPercentCoarse: 0.8: 0: 0: 0: 0
+prm_propPercentFine: 1e-05: 0: 0: 0: 0
+prm_sigma: 1.5: 0: 0: 0: 0
+prm_intensityFactor: 0.5: 0: 0: 0: 0
+prm_maxDistance: 0: 0: 0: 0: 0
+prm_maxDistanceRealDist: 0: 0: 0: 0: 0
+prm_useBigMask: 1: 0: 0: 0: 0
+prm_bigMaskMode: 0: 0: 0: 0: 0
+prm_inverse: 0: 0: 0: 0: 0
+prm_lefthTh: 0: 0: 0: 0: 0
+prm_rightthTh: 255: 0: 0: 0: 0
+prm_firstSmoothingIters: 200: 0: 0: 0: 0
+prm_secondSmoothingIters: 200: 0: 0: 0: 0
+prm_MaxDx: 3.96: 0: 0: 0: 0
+prm_MaxDy: 3.96: 0: 0: 0: 0
+prm_factor: 1: 0: 0: 0: 0
+prm_updateCenter: 0: 0: 0: 0: 0
+prm_updateCenterFactor: 0.1: 0: 0: 0: 0
+prm_thicknessSampling: 4: 1: 170: 85: 127
+prm_showOrigLine: 0: 0: 0: 0: 0
+prm_showSmoothed1: 1: 0: 0: 0: 0
+prm_showSmoothed2: 0: 0: 0: 0: 0
+prm_showLines: 1: 0: 0: 0: 0
+prm_fontSize: 15: 0: 0: 0: 0
+prm_showFront1: 1: 0: 0: 0: 0
+prm_showFront2: 1: 0: 0: 0: 0
+prm_CleanShapes: 1: 0: 0: 0: 0
+prm_textXPos: 0: 0: 0: 0: 0
+prm_textYPos: 0: 0: 0: 0: 0
+prm_infoType: 0: 0: 0: 0: 0
+prm_lineUpperColor: 9: 0: 0: 0: 0
+prm_lineCenterColor: 0: 0: 0: 0: 0
+prm_lineLowerColorID: 5: 0: 0: 0: 0
+prm_lineSegmentsColor: 12: 0: 0: 0: 0
+prm_textColor: 0: 0: 0: 0: 0
+prm_lineSmoothed1Color: 0: 0: 0: 0: 0
+prm_lineSmoothed2Color: 0: 0: 0: 0: 0
+prm_fillColor: 8: 0: 0: 0: 0
+prm_fillOpacity: 0.62: 0: 0: 0: 0
+prm_testMode: 0: 0: 0: 0: 0
+LAYER_END: 
+
+

@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is a shader for test Isophote-->
+
+<Material name="SimpleProceduralTexture" number_of_properties="0" number_of_vertex_shaders="1" number_of_fragment_shaders="1">
+
+  <Shader scope="Vertex" name="ProceduralTextureVert" location="Inline" language="GLSL" entry="main">
+    <LightUniform name="NumLights" value="NumberOfLights"/>
+/* This is a vertex program for ...
+ */
+
+void main()
+{
+  vec3 normal = normalize(gl_Normal);
+  vec4 lp = gl_LightSource[0].position;
+  vec3 V = normalize(gl_ModelViewMatrixInverse * vec4(0.0, 0.0, 0.0, 1.0)).xyz;
+  vec3 L = normalize(lp.xyz - gl_Vertex.xyz);
+  vec3 R = normalize(2.0 * normal * dot(normal, L) - L);
+  gl_FrontColor = gl_BackColor = gl_Color * dot(R, V);
+
+  gl_Position = ftransform();
+}
+
+  </Shader>
+
+  <Shader scope="Fragment" name="ProceduralTextureVert" location="Inline" language="GLSL" entry="main">
+    <Uniform type="float" name="Frequency" number_of_elements="1" value="0.1"/>
+    <LightUniform name="NumLights" value="NumberOfLights"/>
+/* This is a fragment program ...
+ */
+uniform int NumLights;
+
+void main()
+{
+	gl_FragColor = vec4(gl_Color.xyz, 1.0);
+}
+
+  </Shader>
+
+</Material>

@@ -1,0 +1,86 @@
+TIME_ID:2016_12_7_13_40_49_
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 0
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_ENABLED: 0
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 1
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 1
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 6
+BLENDING_OPACITY: 0.364706
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 1
+LAYER_FILTER_NAME: LayerGrowingRegionFilter
+prm_multiply: 7: 1
+prm_showDebug: 0: 1
+prm_Mode: 1: 0
+prm_lth: 0: 0
+prm_rth: 10000: 0
+prm_sampling3DMode: 0: 0
+prm_autoThreshold: 1: 0
+prm_showMask: 0: 0
+prm_segOpacity: 0.5: 0
+prm_showStats: 0: 0
+prm_radiusX: 1: 1
+prm_radiusY: 1: 1
+prm_radiusZ: 1: 1
+prm_maxDist: 30: 1
+prm_ktype: 0: 1
+prm_dilateDist: 2: 1
+prm_closingSize3D: 2: 1
+prm_showFrontNr: 1: 0
+prm_useBigMask: 1: 0
+prm_bigMaskMode: 0: 0
+prm_propPercentCoarse: 0.2: 1
+prm_propPercentFine: 0: 1
+prm_sigma: 1.5: 1
+prm_intensityFactor: 0.5: 1
+prm_showContour1Points: 1: 0
+prm_drawFonts: 1: 0
+prm_infoType: 0: 0
+prm_r1: 255: 0
+prm_g1: 255: 0
+prm_b1: 255: 0
+prm_r2: 255: 0
+prm_g2: 255: 0
+prm_b2: 255: 0
+prm_fontSize: 15: 0
+prm_showInfoPlace: 1: 0
+
+MASK_ENABLED: 0
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 1
+LAYER_END: 
+
+

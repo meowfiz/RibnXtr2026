@@ -1,0 +1,147 @@
+TIME_ID:2014_3_31_14_6_39_
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 0
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: 2
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 0
+LAYER_FILTER_NAME: EmptyFilter
+prm_temporal average: 0
+
+MASK_ENABLED: 0
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: MaskLinearBlendFilter
+prm_orientation: 0
+prm_position: 0
+prm_width: 0
+prm_inverse: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 1
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: 2
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 0
+LAYER_FILTER_NAME: MedianFilter
+prm_radius: 2
+prm_temporal average: 0
+
+MASK_ENABLED: 0
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: MaskLinearBlendFilter
+prm_orientation: 0
+prm_position: 0
+prm_width: 0
+prm_inverse: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 2
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: -2
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 1
+LAYER_FILTER_NAME: EmptyFilter
+prm_temporal average: 0
+
+MASK_ENABLED: 1
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: LayerMaskThicknessAnalysisFilter
+prm_autoThreshold: 1
+prm_median: 1
+prm_medianFactor: 0.548
+prm_medianKernel: 3
+prm_removeCollisions: 1
+prm_removeAllCollisions: 1
+prm_useProbMap: 1
+prm_propPercent: 0.991
+prm_maxDistance: 0
+prm_useBigMask: 1
+prm_bigMaskMode: 0
+prm_inverse: 0
+prm_lefthTh: 0
+prm_rightthTh: 28.83
+prm_firstSmoothingIters: 200
+prm_secondSmoothingIters: 139
+prm_MaxDx: 5
+prm_MaxDy: 5
+prm_factor: 1
+prm_updateCenter: 0
+prm_updateCenterFactor: 0.1
+prm_thicknessSampling: 2
+prm_showOrigLine: 0
+prm_showSmoothed1: 0
+prm_showSmoothed2: 1
+prm_showLines: 1
+prm_fontSize: 22
+prm_showFront1: 1
+prm_showFront2: 1
+prm_CleanShapes: 1
+prm_textXPos: 0
+prm_textYPos: 0
+prm_infoType: 1
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 3
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: 2
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 1
+LAYER_FILTER_NAME: EmptyFilter
+prm_temporal average: 0
+
+MASK_ENABLED: 0
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: MaskLinearBlendFilter
+prm_orientation: 0
+prm_position: 0
+prm_width: 0
+prm_inverse: 0
+LAYER_END: 
+
+

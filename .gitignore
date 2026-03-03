@@ -1,0 +1,28 @@
+# Ignoruj katalogi build
+/build*/
+out/
+bin/
+lib/
+
+# Pliki tymczasowe CMake
+CMakeCache.txt
+CMakeFiles/
+cmake_install.cmake
+install_manifest.txt
+
+# Visual Studio i VS Code
+.vs/
+*.sln
+*.vcxproj*
+.vcxproj.user
+*.VC.db
+*.opendb
+.vscode/
+!.vscode/extensions.json
+!.vscode/settings.json
+!.vscode/launch.json
+!.vscode/tasks.json
+
+# Lokalna konfiguracja (ścieżki)
+CMakeUserPresets.json
+deps.cmake

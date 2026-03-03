@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!-- This is a shader for test Isophote-->
+
+<Material name="SimpleProceduralTexture" number_of_properties="0" number_of_vertex_shaders="1" number_of_fragment_shaders="1">
+
+  <Shader scope="Vertex" name="ProceduralTextureVert" location="Inline" language="GLSL" entry="main">
+  
+/* This is a vertex program for ...
+ */
+
+varying float setScalar;
+
+void main()
+{
+  /* Transform the normal. */
+  vec3 lightDirection = vec3(1.0, 0.5, 0.2);
+  vec3 normal = normalize(gl_NormalMatrix*gl_Normal);
+  if(gl_Vertex.x > 0)
+	setScalar = gl_MultiTexCoord0.x - gl_Vertex.x + normal.x;//normalize(normal * gl_Color.xyz);
+  else
+	setScalar = gl_MultiTexCoord0.x + gl_Vertex.x + normal.x;
+
+  gl_Position = ftransform();
+}
+
+  </Shader>
+
+  <Shader scope="Fragment" name="ProceduralTextureVert" location="Inline" language="GLSL" entry="main">
+    <Uniform type="float" name="Color0" number_of_elements="4" value="0.0 0.0 0.0 1.0"/>
+    <Uniform type="float" name="Color1" number_of_elements="4" value="1.0 1.0 1.0 1.0"/>
+
+/* This is a fragment program ...
+ */
+varying float setScalar;
+
+uniform vec4 Color0;
+uniform vec4 Color1;
+
+void main()
+{
+	setScalar = setScalar * 12.0;
+	int parity = setScalar;
+	
+	if(setScalar == 0)
+	{
+		gl_FragColor = Color0;
+	}
+	else if( setScalar > 11.9)
+	{
+		gl_FragColor = Color1;
+	}
+	else 
+	{
+		if(parity % 2 == 0)
+			gl_FragColor = Color0;
+		else
+			gl_FragColor = Color1;
+	}
+		
+	//gl_FragColor = vec4(setScalar, setScalar, setScalar, 1.0);
+	
+		//setScalar = setScalar * 2.0;
+		//int parity = setScalar;
+		
+		//if(parity % 2 == 0)
+		//	gl_FragColor = Color2;
+		//else
+		//	gl_FragColor = Color1;
+			
+		//gl_FragColor = vec4(setScalar, setScalar, setScalar, 1.0);
+	
+	
+	//gl_FragColor = vec4(setScalar, setScalar, setScalar, 1.0);
+	
+}
+
+  </Shader>
+
+</Material>

@@ -1,0 +1,30 @@
+selected:
+
+Semicircular_canal_left
+Semicircular_canal_right
+Eye_bottom_left
+Eye_bottom_right
+
+WP_right
+WP_left
+WT_right
+WT_left
+GK
+GS
+
+Ear_left
+Ear_right
+
+Eye_corner_left
+Eye_corner_right
+
+triangulated:
+
+TBA BA P1_left P1_right
+TCA_left ICA_left A1_left M1_left
+TCA_right ICA_right A1_right M1_right
+
+triangles:
+
+TBA TCA_left TCA_right
+

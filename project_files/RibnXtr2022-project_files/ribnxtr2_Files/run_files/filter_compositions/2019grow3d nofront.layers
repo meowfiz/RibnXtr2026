@@ -1,0 +1,112 @@
+TIME_ID:2019_2_22_12_29_28_
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 0
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+main_RememberBuffer: 0: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 1
+CHILD_MODE: 0
+DATASET_NUMBER: 1
+main_Opacity: 0: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 0: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+main_RememberBuffer: 0: 0
+LAYER_FILTER_NAME: LayerGrowingRegionFilter
+prm_multiFront: 1: 0
+prm_multiSeed: 1: 0
+prm_findEndPoints: 1: 0
+prm_don't Calculate2D: 1: 0
+prm_multiply: 19297: 0
+prm_mcValue: 0.01: 1
+prm_GrowFromPoint: 0: 1
+prm_showDebug: 0: 1
+prm_Mode: 1: 0
+prm_lth: 0: 0
+prm_rth: 10000: 0
+prm_autoThreshold: 1: 0
+prm_thresholdAddLeft: 0: 0
+prm_thresholdAddRight: 0: 1
+prm_blockSmallFronts: 0: 1
+prm_minSizeToBlock: 0: 1
+prm_maxSizeToBlock: 444: 0
+prm_nrOfChecks: 2: 0
+prm_sampling3DMode: 2: 0
+prm_angleTestDist: 0: 0
+prm_angleTestAngle: 90: 0
+prm_kernelSkelSearchSize: 3: 1
+prm_cutSkelFromBegining: 0: 1
+prm_cutSkelThresh: 20: 1
+prm_connectSkelAndJoints: 1: 0
+prm_generateEndPointsBalls: 1: 0
+prm_generateTracingSkeletons: 0: 0
+prm_dontRemoveDistMap: 1: 0
+prm_showAdvGlyph: 0: 0
+prm_showBreakGlyph: 0: 1
+prm_showStats: 0: 1
+prm_radiusX: 1.77: 1
+prm_radiusY: 1.49: 0
+prm_radiusZ: 2.52: 0
+prm_maxVolume: 19.97: 0
+prm_maxDist: 158: 0
+prm_ktype: 0: 0
+prm_dilateSize: 0: 1
+prm_ClosingSize: 0: 1
+prm_showFrontNr: 1: 1
+prm_useBigMask: 1: 0
+prm_bigMaskMode: 0: 0
+prm_propPercentCoarse: 0.01: 0
+prm_propPercentFine: 0.0416: 0
+prm_sigma: 2.87: 0
+prm_intensityFactor: 0.5: 0
+prm_drawFonts: 1: 1
+prm_endPointRadius: 0.2991: 1
+prm_infoType: 0: 0
+prm_r1: 255: 0
+prm_g1: 255: 0
+prm_b1: 255: 0
+prm_r2: 255: 0
+prm_g2: 255: 0
+prm_b2: 255: 0
+prm_fontSize: 4: 0
+prm_showInfoPlace: 0: 1
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0
+LAYER_END: 
+
+

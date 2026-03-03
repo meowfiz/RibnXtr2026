@@ -1,0 +1,214 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ This is a simple anisotropic shader.  The lighting model is taken from
+ "Efficient Rendering of Anisotropic Surfaces Using Computer Graphics" by
+ Heidrich and Seidel (who get their shading from "Illumination in Diverse
+ Codimensions" by Banks who in derived his model from "Rendering Fur With
+ Three Dimensional Textures" by Kajiya and Kay.
+
+ Copyright 2006 Sandia Corporation.
+ Under the terms of Contract DE-AC04-94AL85000, there is a non-exclusive
+ license for use of this work by or on behalf of the
+ U.S. Government. Redistribution and use in source and binary forms, with
+ or without modification, are permitted provided that this Notice and any
+ statement of authorship are reproduced on all copies.
+-->
+
+
+<Material name="Anisotropic"
+          number_of_properties="1"
+          number_of_vertex_shaders="1"
+          number_of_fragment_shaders="1">
+  <Property name="AnisotropicHighlights">
+    <Member name="SpecularColor" number_of_elements="3"
+            type="float" value="1.0 1.0 1.0"/>
+    <Member name="Specular" number_of_elements="1"
+            type="float" value="1.0"/>
+    <Member name="SpecularPower" number_of_elements="1"
+            type="float" value="50.0"/>
+  </Property>
+
+  <Shader scope="Vertex"
+          name="AnisotropicVert"
+          location="Inline"
+          language="GLSL"
+          entry="main">
+    <Uniform name="ScratchAxis" type="float"
+             number_of_elements="3" value="0.0 0.0 1.0"/>
+/* This is the vertex program for a simple anisotropic shader.  The lighting
+ * model is taken from "Efficient Rendering of Anisotropic Surfaces Using
+ * Computer Graphics" by Heidrich and Seidel (who get their shading from
+ * "Illumination in Diverse Codimensions" by Banks who in derived his model from
+ * "Rendering Fur With Three Dimensional Textures" by Kajiya and Kay.
+ *
+ * This anisotropic lighting model simulates the effect of a material with
+ * microscopic fibers, scratches, or grooves that are aligned in a particular
+ * direction.  That direction must be known in advanced.  Since we usually don't
+ * have a direction in mind, we just fabricate one here.  We do this by taking
+ * the cross product of the object coordinate with a given vector and projecting
+ * that onto the tangent plane.  This creates fibers that rotate about the
+ * vector.  It is a nice effect for most objects, but creates singularities
+ * along the vector (where the rotation is of radius 0) and where the surface
+ * normal happens to be perpendicular to both the object coordinate vector and
+ * the given vector (which can happen everywhere on the plane containing both
+ * the given vector and the origin).
+ */
+
+/*
+ * Copyright 2006 Sandia Corporation.
+ * Under the terms of Contract DE-AC04-94AL85000, there is a non-exclusive
+ * license for use of this work by or on behalf of the
+ * U.S. Government. Redistribution and use in source and binary forms, with
+ * or without modification, are permitted provided that this Notice and any
+ * statement of authorship are reproduced on all copies.
+ */
+
+varying vec3 Normal;
+varying vec3 Tangent;
+
+uniform vec3 ScratchAxis;
+
+/* This function projects the vector v onto the plane defined by normal n.
+ * the magnitude of n should be 1. */
+vec3 projectOnPlane(in vec3 v, in vec3 n)
+{
+  return v - dot(n,v)*n;
+}
+
+void main(void)
+{
+  gl_Position = ftransform();
+
+  /* Transform the normal. */
+  Normal = normalize(gl_NormalMatrix*gl_Normal);
+
+  /* Fabricate a scratch direction. */
+  vec3 rotationalDirection = cross(gl_Vertex.xyz, ScratchAxis);
+  rotationalDirection = gl_NormalMatrix*rotationalDirection;
+  Tangent = normalize(projectOnPlane(rotationalDirection, Normal));
+
+  /* Pass lighting and coloring parameters. */
+  gl_FrontColor = gl_Color;
+  gl_BackColor = gl_Color;
+  gl_TexCoord[0] = gl_MultiTexCoord0;
+}
+
+  </Shader>
+
+  <Shader scope="Fragment"
+          name="AnisotropicFrag"
+          location="Inline"
+          language="GLSL"
+          entry="main">
+    <LightUniform name="NumLights" value="NumberOfLights"/>
+/* This is the fragment program for a simple anisotropic shader.  The lighting
+ * model is taken from "Efficient Rendering of Anisotropic Surfaces Using
+ * Computer Graphics" by Heidrich and Seidel (who get their shading from
+ * "Illumination in Diverse Codimensions" by Banks who in derived his model from
+ * "Rendering Fur With Three Dimensional Textures" by Kajiya and Kay.
+ *
+ * This anisotropic lighting model simulates the effect of a material with
+ * microscopic fibers, scratches, or grooves that are aligned in a particular
+ * direction.  That direction must be known in advanced.  Since we usually don't
+ * have a direction in mind, we just fabricate one here.  We do this by taking
+ * the cross product of the object coordinate with a given vector and projecting
+ * that onto the tangent plane.  This creates fibers that rotate about the
+ * vector.  It is a nice effect for most objects, but creates singularities
+ * along the vector (where the rotation is of radius 0) and where the surface
+ * normal happens to be perpendicular to both the object coordinate vector and
+ * the given vector (which can happen everywhere on the plane containing both
+ * the given vector and the origin).
+ */
+
+/*
+ * Copyright 2006 Sandia Corporation.
+ * Under the terms of Contract DE-AC04-94AL85000, there is a non-exclusive
+ * license for use of this work by or on behalf of the
+ * U.S. Government. Redistribution and use in source and binary forms, with
+ * or without modification, are permitted provided that this Notice and any
+ * statement of authorship are reproduced on all copies.
+ */
+
+varying vec3 Normal;
+varying vec3 Tangent;
+
+uniform int NumLights;
+
+/* Compute the contribution from a particular light source. */
+void DirectionalLight(in int lightIndex,
+                      in vec3 normal,
+                      in vec3 tangent,
+                      inout vec4 ambient,
+                      inout vec4 diffuse,
+                      inout vec4 specular)
+{
+  vec3 light = normalize(vec3(gl_LightSource[lightIndex].position));
+
+  /**** Compute ambient term. ****/
+  ambient += gl_LightSource[lightIndex].ambient;
+
+  /**** Compute a "corrective" term for object shelf shadowing. ****/
+  float cosNL = dot(normal, light);
+  float shadow = max(0.0, cosNL);
+
+  /**** Compute diffuse term. ****/
+  float cosLT = dot(tangent, light);
+  /* This is the cosine of the angle between the light vector and the plane
+     perpendicular to the tangent vector. */
+  float cosLNp = sqrt(1.0 - cosLT*cosLT);
+  diffuse += gl_LightSource[lightIndex].diffuse * shadow*cosLNp;
+
+  /**** Compute specular term. ****/
+  float cosVT = dot(vec3(0.0, 0.0, -1.0), tangent);
+  float cosVNp = sqrt(1.0 - cosVT*cosVT);
+  float cosVR = cosLNp*cosVNp - cosLT*cosVT; /* cos view, reflection. */
+  cosVR = max(cosVR, 0.0);
+  specular += (  gl_LightSource[lightIndex].specular
+               * shadow * pow(cosVR, gl_FrontMaterial.shininess) );
+}
+
+void AllLights(in vec3 normal,
+               in vec3 tangent,
+               inout vec4 ambient,
+               inout vec4 diffuse,
+               inout vec4 specular)
+{
+  DirectionalLight(0, normal, tangent, ambient, diffuse, specular);
+  if (NumLights &gt; 1)
+    {
+    DirectionalLight(1, normal, tangent, ambient, diffuse, specular);
+    if (NumLights &gt; 2)
+      {
+      DirectionalLight(2, normal, tangent, ambient, diffuse, specular);
+      if (NumLights &gt; 3)
+        {
+        DirectionalLight(3, normal, tangent, ambient, diffuse, specular);
+        if (NumLights &gt; 4)
+          {
+          DirectionalLight(4, normal, tangent, ambient, diffuse, specular);
+          }
+        }
+      }
+    }
+}
+
+void main(void)
+{
+  /* If lighting the back of a polygon, flip normal.*/
+  vec3 normal = normalize(Normal);
+  vec3 tangent = normalize(Tangent);
+
+  /* Compute light contributions. */
+  vec4 ambient = vec4(0.0);
+  vec4 diffuse = vec4(0.0);
+  vec4 specular = vec4(0.0);
+  AllLights(normal, tangent, ambient, diffuse, specular);
+
+  gl_FragColor = (  ambient*gl_FrontMaterial.ambient
+                  + diffuse*gl_FrontMaterial.diffuse
+                  + specular*gl_FrontMaterial.specular);
+}
+
+  </Shader>
+</Material>

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+-->
+
+
+<Material name="Phong"
+          number_of_properties="0"
+          number_of_vertex_shaders="1"
+          number_of_fragment_shaders="1">
+
+  <Shader scope="Vertex"
+          name="PhongVert"
+          location="Inline"
+          language="GLSL"
+          entry="main">
+/*
+ */
+
+varying float scalar;
+
+void main(void)
+{
+  vec4 vertexEyeSpace = gl_ModelViewMatrix * gl_Vertex;
+  vec3 lightDirection = vec3(gl_LightSource[1].position - vertexEyeSpace);// locate space
+  vec4 normls = vec4(gl_ModelViewMatrix * gl_Normal, 1.0);
+  vec4 normlsEyeSpace = gl_ModelViewMatrixTranspose * normls;
+  scalar = dot(normalize(lightDirection), normlsEyeSpace.xyz); // range [-1 1]
+  scalar = (scalar + 1.0) * 6.0; // range [0 12]
+  
+  gl_Position = ftransform();
+}
+
+  </Shader>
+
+  <Shader scope="Fragment"
+          name="PhongFrag"
+          location="Inline"
+          language="GLSL"
+          entry="main">
+    <Uniform type="float" name="Color0" number_of_elements="4" value="0.0 0.0 0.0 1.0"/>
+    <Uniform type="float" name="Color1" number_of_elements="4" value="1.0 1.0 1.0 1.0"/>
+/*
+ */
+ 
+varying float scalar;
+
+uniform vec4 Color0;
+uniform vec4 Color1;
+
+void main(void)
+{
+	int parity = scalar;
+	
+	if(scalar == 0.0)
+	{
+		gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
+	}
+	else if( scalar > 11.9)
+	{
+		gl_FragColor = vec4(1.0, 0.0, 1.0, 1.0);
+	}
+	else 
+	{
+		if(parity % 2 == 0)
+			gl_FragColor = Color1;
+		else
+			gl_FragColor = Color0;
+	}}
+
+  </Shader>
+</Material>

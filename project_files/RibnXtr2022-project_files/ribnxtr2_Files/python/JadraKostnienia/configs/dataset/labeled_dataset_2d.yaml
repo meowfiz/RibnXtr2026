@@ -1,0 +1,14 @@
+dataset:
+  type: "labeled_2d"
+  data_path: "labeled"
+  data_transform: img_to_256x256.yaml
+  mask_transform: img_to_256x256_nn_squeezed.yaml
+  train_samples_per_epoch: 10000
+  val_samples_per_epoch: 2000
+  split: [0.8, 0.2] #[train, val]
+  
+  # NOTE: rootem danych jest katalog, w którym został zapisany wynik skryptu utils/volume_to_numpy.py
+  # wskazany data_path to katalog w roocie. W innych skryptach bede trzymał się konwencji
+  # że komentarz DATA_SOURCE mówi o tym gdzie należy wskazać root do danych
+  
+  # DATA_SOURCE: output of volume_to_numpy.np

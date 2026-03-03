@@ -1,0 +1,16 @@
+[VolRenSettings]
+BlendMode=0
+shading=Off
+gradient_opacity=Off
+interpolation=On
+slider_0=1000
+slider_1=0
+slider_2=200
+slider_3=1000
+slider_4=200
+PaletteNr=80
+NrPts=2
+point_Pos_0=0
+opacity_0=1
+point_Pos_1=1
+opacity_1=1

@@ -1,0 +1,196 @@
+TIME_ID:2020_10_23_12_15_50_
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 0
+CHILD_MODE: 0
+DATASET_NUMBER: 4
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 1: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskLinearBlendFilter
+prm_orientation: 0: 0
+prm_position: 0: 0
+prm_width: 0: 0
+prm_inverse: 0: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 1
+CHILD_MODE: 0
+DATASET_NUMBER: 3
+main_Opacity: 0: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskLinearBlendFilter
+prm_orientation: 0: 0
+prm_position: 0: 0
+prm_width: 0: 0
+prm_inverse: 0: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 2
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 0.9998: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+LAYER_FILTER_NAME: LayerGaussianFilter
+prm_radius: 8: 1
+prm_stddev: 0.29: 0
+prm_useWeightMap: 0: 0
+prm_amount: 1: 0
+prm_invertWeights: 0: 0
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 3
+CHILD_MODE: 0
+DATASET_NUMBER: -3
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 1e-07: 0
+main_Addition: 0: 0
+main_AutoNormalize: 1: 0
+main_MaskFilterEnable: 1: 0
+main_BrightnessFilterMode: 0: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_NUMBER: 2
+LAYER_MASK_FILTER_NAME: LayerMaskThicknessAnalysisFilter
+prm_samplingThickness: 2: 0
+prm_ClosingProbMap: 0: 0
+prm_leftInputCutt: 0: 0
+prm_rightInputCutt: 100: 0
+prm_autoThreshold: 1: 0
+prm_median: 1: 0
+prm_medianFactor: 1: 16
+prm_medianKernel: 4: 64
+prm_removeCollisions: 1: 0
+prm_removeAllCollisions: 1: 0
+prm_improveCollision: 1: 0
+prm_useProbMap: 1: 0
+prm_IntensityStats: 1: 0
+prm_leftIntensTh: 33: 0
+prm_rightIntensTh: 66: 38
+prm_propPercentCoarse: 0.1: 64
+prm_propPercentFine: 1e-05: 0
+prm_sigma: 1.01: 0
+prm_intensityFactor: 0.553: 0
+prm_maxDistance: 69.8: 0
+prm_maxDistanceRealDist: 0: 0
+prm_useBigMask: 1: 0
+prm_bigMaskMode: 0: 28
+prm_inverse: 0: 64
+prm_lefthTh: 0: 82
+prm_rightthTh: 255: 184
+prm_firstSmoothingIters: 49: 30
+prm_secondSmoothingIters: 66: 133
+prm_MaxDx: 5: 235
+prm_MaxDy: 5: 81
+prm_factor: 1: 216
+prm_updateCenter: 1: 63
+prm_updateCenterFactor: 0.182: 0
+prm_thicknessSampling: 3: 0
+prm_showOrigLine: 1: 0
+prm_showSmoothed1: 0: 0
+prm_showSmoothed2: 0: 0
+prm_showLines: 1: 0
+prm_fontSize: 15: 0
+prm_showFront1: 1: 0
+prm_showFront2: 1: 0
+prm_CleanShapes: 1: 0
+prm_textXPos: 0: 0
+prm_textYPos: 0: 0
+prm_infoType: 6: 0
+prm_lineUpperColor: 11: 0
+prm_lineCenterColor: 7: 0
+prm_lineLowerColorID: 12: 0
+prm_lineSegmentsColor: 8: 0
+prm_textColor: 10: 0
+prm_lineSmoothed1Color: 4: 0
+prm_lineSmoothed2Color: 11: 0
+prm_fillColor: 7: 0
+prm_fillOpacity: 0.38: 0
+prm_testMode: 0: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 4
+CHILD_MODE: 0
+DATASET_NUMBER: -2
+main_Opacity: 1: 0
+main_LayerEnable: 1: 0
+main_LayerSourceMixed: 0: 0
+main_Modes: 0: 0
+main_FilterEnable: 1: 0
+main_FilterInverse: 0: 0
+main_Multiplier: 0.9998: 0
+main_Addition: 0: 0
+main_AutoNormalize: 0: 0
+main_MaskFilterEnable: 0: 0
+main_BrightnessFilterMode: 0: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_NUMBER: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 0
+LAYER_END: 
+
+

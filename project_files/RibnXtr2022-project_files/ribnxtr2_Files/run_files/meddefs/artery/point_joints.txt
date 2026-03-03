@@ -1,0 +1,43 @@
+lines:
+
+TCA_left WP_right
+TCA_left WP_left
+TCA_left WT_right
+TCA_left WT_left
+TCA_left GK
+TCA_left GS
+
+TCA_right WP_right
+TCA_right WP_left
+TCA_right WT_right
+TCA_right WT_left
+TCA_right GK
+TCA_right GS
+
+TBA GK
+TBA WT_right
+TBA WT_left
+TBA WP_right
+TBA WP_left
+TBA GS
+
+TCA_right TCA_left
+TCA_right TBA
+TCA_left TBA
+
+
+triangles:
+
+TBA TCA_left TCA_right
+
+planes:
+
+DPC GK  WP_right WP_left
+TBA TCA_left TCA_right
+
+base_planes:
+
+
+Frankfurt Ear_left Ear_right Eye_bottom_left Eye_bottom_right
+Eye_ear Ear_left Ear_right Eye_corner_left Eye_corner_right
+Semicircular Semicircular_canal_left Semicircular_canal_right Eye_bottom_left Eye_bottom_right

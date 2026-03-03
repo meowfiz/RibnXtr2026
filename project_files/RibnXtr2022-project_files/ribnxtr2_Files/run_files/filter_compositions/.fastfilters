@@ -1,0 +1,79 @@
+!Morphology-test
+!zdjecia-thickness
+1.ghost i final c0
+1.ghost i final c01
+2019grow2d
+2019grow2d-median
+2022- islands
+2022- thickness test
+2022-explode 2d test
+2022-zalewanie pod zatoki
+2d convolution
+Artery-253
+Artery-253-2021.06.17
+Artery-CT-test1
+Artery-CT-test2- DO PRACY
+Artery-Resample
+Artery-Zdjecia-naczynia1-prob2
+Artery-doppler test1
+Artery-doppler test2
+Artery-forSinuses
+Artery-gaussian
+Artery-intensity
+Artery-intensityFunction
+Artery-median
+Artery-probability
+Artery-threshold-global
+Artery-threshold-global-2
+Artery-threshold-global-E
+Artery-threshold-global-czerwony
+Artery-threshold-global-test
+Artery-threshold-global-tmp
+Artery-threshold-global-tmp-E
+Artery-threshold-tekstury test
+Resample
+Zdjecia-naczynia1
+Zdjecia-naczynia1-prob
+Zdjecia-naczynia1-prob2
+aniso
+biilateral
+bright and sharp
+brightness
+canny edge detection
+canyy dla opt
+default
+default
+directional one angle
+explode 2d test
+explode test
+explode3d
+gausian diff tst
+gauss
+grow-naczynia
+grow-zatoki
+grow-zatoki-size1
+grow-zatoki-szare
+grow3d
+grow3d-nifti
+grow3d-nowy
+hist_equalization
+kinDistanceFill
+linehisttest
+reginon2d- NIE DZIALA
+statistical directional
+szybki test do 
+test-ttw
+test-ttw1
+testy-obrazek-gielecki
+th-med2-s3c2
+ttw1
+tubetk-dla data2- prob data 2
+tubetk-dla data2- prob data 2-no morph
+tubetk-dla data2- prob data 2-test2
+tubetk-dla data3-signlefront
+tubetk-first
+tubetk-first-multifront
+tubetk-first-multifront-threshold global
+unsharp
+unsharp - tests
+zupa

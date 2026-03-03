@@ -1,0 +1,84 @@
+TIME_ID:2016_2_10_16_10_46_
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 0
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: 1
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 0
+LAYER_FILTER_NAME: EmptyFilter
+prm_temporal average: 0: 0
+
+MASK_ENABLED: 0
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: MaskLinearBlendFilter
+prm_orientation: 0: 0
+prm_position: 0: 0
+prm_width: 6: 0
+prm_inverse: 0: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: Layer 1
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: 1
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 1
+LAYER_FILTER_NAME: EmptyFilter
+prm_temporal average: 0: 0
+
+MASK_ENABLED: 1
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: LayerMaskExplodeSegmentationRegionFilter
+prm_inverse: 0: 0
+prm_Mode: 1: 1
+prm_lth: 0: 1
+prm_rth: 4096: 1
+prm_samplingType: 0: 0
+prm_showMask: 1: 0
+prm_segOpacity: 0.5: 0
+prm_calculateStats: 1: 1
+prm_radius1: 10: 1
+prm_radius2: 10: 1
+prm_angle: 1: 1
+prm_dest: 167: 1
+prm_maxDist: 512: 1
+prm_median: 1: 1
+prm_medianFactor: 1: 1
+prm_medianKernel: 2: 1
+prm_medianThreshold: 10: 1
+prm_ktype: 0: 1
+prm_dilateDist: 2: 1
+prm_useBigMask: 1: 1
+prm_bigMaskMode: 0: 0
+prm_propPercent1: 0.727: 1
+prm_showContour1Points: 0: 0
+prm_drawFonts: 1: 0
+prm_infoType: 0: 0
+prm_r1: 255: 0
+prm_g1: 255: 0
+prm_b1: 255: 0
+prm_fontSize: 15: 0
+LAYER_END: 
+
+

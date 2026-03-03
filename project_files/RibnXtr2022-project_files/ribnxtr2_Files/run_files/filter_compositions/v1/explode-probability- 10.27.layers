@@ -1,0 +1,150 @@
+TIME_ID:2016_11_4_16_19_53_
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: back
+LAYER_ENABLED: 0
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 1
+LAYER_FILTER_NAME: GaussianFilter
+prm_radius: 2: 1
+prm_stddev: 0.3: 1
+prm_useWeightMap: 0: 0
+prm_amount: 1: 0
+prm_invertWeights: 0: 0
+
+MASK_ENABLED: 0
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: MaskLinearBlendFilter
+prm_orientation: 0: 1
+prm_position: 0.5: 1
+prm_width: 20: 1
+prm_inverse: 0: 1
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: gaussian of back
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_ENABLED: 0
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: MaskLinearBlendFilter
+prm_orientation: 0: 0
+prm_position: 0: 0
+prm_width: 0: 0
+prm_inverse: 0: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: explode of gaussian
+LAYER_ENABLED: 1
+CHILD_MODE: 0
+DATASET_NUMBER: -2
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 0
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_ENABLED: 1
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: LayerMaskExplodeSegmentationRegionFilter
+prm_inverse: 0: 1
+prm_Mode: 1: 1
+prm_lth: 0: 1
+prm_rth: 3066: 1
+prm_sampling3DMode: 0: 1
+prm_autoThreshold: 0: 1
+prm_showMask: 1: 1
+prm_segOpacity: 0.212: 1
+prm_showStats: 1: 1
+prm_radiusX: 4.87: 1
+prm_radiusY: 4.97: 1
+prm_radiusZ: 5: 1
+prm_angle: 0: 0
+prm_dest: 50: 0
+prm_maxDist: 176: 1
+prm_median: 1: 1
+prm_medianFactor: 1: 1
+prm_medianKernel: 3: 1
+prm_medianKernel3D: 3: 1
+prm_medianThreshold: 1: 1
+prm_ktype: 1: 1
+prm_dilateDist: 3: 1
+prm_closingSize3D: 2: 1
+prm_useBigMask: 1: 1
+prm_bigMaskMode: 0: 0
+prm_propPercentCoarse: 0.2: 1
+prm_propPercentFine: 0.006: 1
+prm_sigma: 2.32: 1
+prm_intensityFactor: 0.553: 1
+prm_onlyShortening: 1: 1
+prm_ellipseRayDest: 0: 0
+prm_showContour1Points: 0: 0
+prm_drawFonts: 0: 0
+prm_infoType: 0: 0
+prm_r1: 92: 0
+prm_g1: 243: 0
+prm_b1: 0: 0
+prm_fontSize: 7: 1
+prm_showInfoPlace: 4: 0
+LAYER_END: 
+
+
+
+--------------------------------------------
+LAYER_BEGIN: 
+
+LAYER_NAME: original cover
+LAYER_ENABLED: 0
+CHILD_MODE: 0
+DATASET_NUMBER: 0
+USE_MIXED_RESULT: 0
+INVERSE_FILTER: 0
+BLENDING_MODE: 0
+BLENDING_OPACITY: 1
+BLENDING_MULTIPLIER: 1
+BLENDING_ADDITION: 0
+LAYER_FILTER_ENABLED: 0
+LAYER_FILTER_NAME: EmptyFilter
+
+MASK_ENABLED: 0
+MASK_NUMBER: 0
+INVERSE_MASK: 0
+LAYER_MASK_FILTER_NAME: MaskEmptyFilter
+prm_inverse: 0: 1
+LAYER_END: 
+
+

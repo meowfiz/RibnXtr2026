@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<!--
+ This shader simply adds a white specular reflection on a surface as you
+ would expect from a smooth plastic surface.
+
+ Copyright 2006 Sandia Corporation.
+ Under the terms of Contract DE-AC04-94AL85000, there is a non-exclusive
+ license for use of this work by or on behalf of the
+ U.S. Government. Redistribution and use in source and binary forms, with
+ or without modification, are permitted provided that this Notice and any
+ statement of authorship are reproduced on all copies.
+-->
+
+
+<Material name="SmoothPlastic"
+          number_of_properties="1"
+          number_of_vertex_shaders="0"
+          number_of_fragment_shaders="0">
+  <Property name="ShinyProperty">
+    <Member name="DiffuseColor" number_of_elements="3" type="Double"
+            value="1.0 0.0 0.0"/>
+    <Member name="SpecularColor" number_of_elements="3" type="Double"
+            value="1.0 1.0 1.0"/>
+    <Member name="Specular" number_of_elements="1" type="Double"
+            value="1.0"/>
+    <Member name="SpecularPower" number_of_elements="1" type="Double"
+            value="50.0"/>
+  </Property>
+</Material>
