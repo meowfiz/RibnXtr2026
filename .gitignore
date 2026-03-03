@@ -26,3 +26,4 @@ install_manifest.txt
 # Lokalna konfiguracja (ścieżki)
 CMakeUserPresets.json
 deps.cmake
+*.bak

@@ -1,4 +1,4 @@
-﻿//#pragma message("RibnXtr2023: main.cpp CHANGED 2026-02-27")
+//#pragma message("RibnXtr2023: main.cpp CHANGED 2026-02-27")
 //#pragma message("SECOND BUILD TEST")
 #include <qapplication.h>
 //#include <qplatinumstyle.h>
