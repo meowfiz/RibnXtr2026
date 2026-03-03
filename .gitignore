@@ -27,3 +27,7 @@ install_manifest.txt
 CMakeUserPresets.json
 deps.cmake
 *.bak
+
+# local runtime configs
+project_files/**/run_files/config.ini
+project_files/**/run_files/geom_config.ini
