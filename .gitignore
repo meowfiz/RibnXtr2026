@@ -31,3 +31,7 @@ deps.cmake
 # local runtime configs
 project_files/**/run_files/config.ini
 project_files/**/run_files/geom_config.ini
+
+# Python cache / bytecode
+__pycache__/
+*.pyc
