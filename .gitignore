@@ -28,6 +28,7 @@ CMakeUserPresets.json
 deps.cmake
 *.bak
 project_files/RibnXtr2022-project_files/ribnxtr2_Files/run_files/.code
+project_files/RibnXtr2022-project_files/ribnxtr2_Files/run_files/.RibonXDefaultDir
 
 # local runtime configs
 project_files/**/run_files/config.ini
