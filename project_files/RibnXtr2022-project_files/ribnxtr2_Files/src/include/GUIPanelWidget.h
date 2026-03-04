@@ -237,6 +237,7 @@ public:
 
 	void	CreateDevTab(MyDockWidget* qtab);
 
+	void	CreateJobsTab(MyDockWidget *qtab);
 	void	CreateLogTab(MyDockWidget *qtab);
 
 	void	CreateVolumeVisTab(MyDockWidget *qtab);

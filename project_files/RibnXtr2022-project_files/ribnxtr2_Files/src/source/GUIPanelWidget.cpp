@@ -128,10 +128,12 @@ GUIPanelWidget::GUIPanelWidget(unsigned char * _PalTab, int _PalNr, QList <QStri
 	GUIWidgets[pos] = new MyDockWidget("Surface Registration", "Surface Registration", false, parent);		CreateSurfaceRegistrationTab(GUIWidgets[pos]);	GUIWidgets[pos]->setStyleSheet(style2);	pos++;//13
 	GUIWidgets[pos] = new MyDockWidget("Animation", "Animation", false, parent);					CreateSequenceGenerationTab(GUIWidgets[pos]);	GUIWidgets[pos]->setStyleSheet(style2);	pos++;//14
 
-	GUIWidgets[pos] = new MyDockWidget("Logs", "Logs", false, 0);					CreateLogTab(GUIWidgets[pos]);					GUIWidgets[pos]->setStyleSheet(style1);	pos++; //15
+GUIWidgets[pos] = new MyDockWidget("Jobs", "Jobs", false, 0);					CreateJobsTab(GUIWidgets[pos]);					GUIWidgets[pos]->setStyleSheet(style1);	pos++; //15
 
-	GUIWidgets[pos] = new MyDockWidget("Mask Data", "Mask Data", 0);				CreateMaskTab(GUIWidgets[pos]);					GUIWidgets[pos]->setStyleSheet(style1);	pos++; //16
-	GUIWidgets[pos] = new MyDockWidget("Dev Tools", "Dev Tools", false, 0);					CreateDevTab(GUIWidgets[pos]);					GUIWidgets[pos]->setStyleSheet(style1);	pos++; //17
+GUIWidgets[pos] = new MyDockWidget("Logs", "Logs", false, 0);					CreateLogTab(GUIWidgets[pos]);					GUIWidgets[pos]->setStyleSheet(style1);	pos++; //16
+
+GUIWidgets[pos] = new MyDockWidget("Mask Data", "Mask Data", 0);				CreateMaskTab(GUIWidgets[pos]);					GUIWidgets[pos]->setStyleSheet(style1);	pos++; //17
+GUIWidgets[pos] = new MyDockWidget("Dev Tools", "Dev Tools", false, 0);					CreateDevTab(GUIWidgets[pos]);					GUIWidgets[pos]->setStyleSheet(style1);	pos++; //18
 
 	//for(i=0;i<12;i++)
 
@@ -12289,7 +12291,7 @@ void	GUIPanelWidget::CreateDevTab(MyDockWidget* qtab)
 
 }
 //---------------------------------
-void	GUIPanelWidget::CreateLogTab(MyDockWidget *qtab)
+void	GUIPanelWidget::CreateJobsTab(MyDockWidget *qtab)
 {
 
 	logTabMainWidget = new QWidget(qtab);
@@ -12473,5 +12475,23 @@ void	GUIPanelWidget::CreateLogTab(MyDockWidget *qtab)
 
 	MainLayout->addWidget(clearLogPushButton);
 
+}
+
+//---------------------------------
+void	GUIPanelWidget::CreateLogTab(MyDockWidget *qtab)
+{
+	QWidget* logTabWidget = new QWidget(qtab);
+	qtab->setScrollWidget(logTabWidget);
+
+	QLayout* mainLayout = new QVBoxLayout();
+	logTabWidget->setLayout(mainLayout);
+
+	logTextEdit = new QPlainTextEdit(logTabWidget);
+	mainLayout->addWidget(logTextEdit);
+
+	clearLogPushButton = new QPushButton2(buttonList, "ClearLog", logTabWidget);
+	mainLayout->addWidget(clearLogPushButton);
+
+	connect(clearLogPushButton, SIGNAL(clicked()), logTextEdit, SLOT(clear()));
 }
 

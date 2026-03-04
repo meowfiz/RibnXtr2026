@@ -11,8 +11,11 @@ Ten plik zawiera **bieżącą listę zadań** dla projektu, wspólną dla obu ma
 
 ### Do zrobienia
 - [ ] Ustalić i spisać architekturę głównych modułów w `PROJECT_NOTES.md`.
-- [ ] Skonfigurować i udokumentować standardowy workflow buildowania na obu maszynach.
+- [ ] Dopracować opis standardowego workflow buildowania na obu maszynach (w oparciu o skrypty w `tools/`).
+- [ ] Rozszerzyć opis pipeline’u `JadraSegmentator` (wejście/wyjście, struktura masek, etykietowany wolumen) w `PROJECT_NOTES.md`.
 
 ### W toku
 
 ### Zrobione
+- [x] Ujednolicono konfigurację builda i dokumentacji na obu maszynach (skrypty w `tools/`, CMake, README).
+- [x] Skonfigurowano i przetestowano działanie `JadraSegmentator` na machine 2 (w tym logowanie i maski `.jadra.mask`).

@@ -159,8 +159,37 @@ Szczegóły i kroki są w `README.md`, tu tylko **zarys**:
   - `PROJECT_NOTES.md` (architektura, decyzje),
   - `TODO.md` (zadania),
   - `notes/YYYY-MM-DD-sesja.md` (dzienniki)  
-  jako głównego kontekstu.
+  jako głównego kontekstu **i jest odpowiedzialny za ich bieżącą aktualizację w trakcie pracy** (bez konieczności przypominania).
 - Po zakończeniu dnia:
   - aktualizujemy `TODO.md` oraz dzisiejszy plik w `notes/`,
   - commitujemy zmiany i robimy `git push`,
   - druga maszyna po `git pull` ma pełen kontekst.
+
+---
+
+## 7. Zasady commitów (Git)
+
+- Każdy commit powinien mieć:
+  - **krótką, jednowierszową nazwę** (summary) – po polsku, opisującą sens zmiany (np. „Ujednolicenie konfiguracji builda i dokumentacji na obu maszynach”),
+  - **dłuższy opis (body)** w kilku punktach, zaczynających się od `- `, opisujących co konkretnie zostało zmienione.
+- Dzięki temu:
+  - w **GitHub Desktop** w zakładce `History` widoczny jest zarówno tytuł, jak i pełny opis,
+  - łatwo odtworzyć kontekst zmian po czasie (co się działo w poszczególnych dniach/sesjach).
+- Jeśli proszę asystenta o wykonanie commita:
+  - commit ma być przygotowany właśnie w tym formacie (tytuł + punktowany opis),
+  - push na GitHub odbywa się **tylko na wyraźną prośbę**, inaczej commit zostaje lokalnie.
+
+---
+
+## 8. Zamykanie dnia pracy („kończę pracę na dziś”)
+
+- Ustalone hasło: **„kończę pracę na dziś”** (lub bardzo podobne sformułowanie) oznacza:
+  - asystent:
+    - aktualizuje dzisiejszy dziennik w `notes/YYYY-MM-DD-sesja.md` (sekcje: plan/co zrobione/notatki),
+    - w razie potrzeby domyka `TODO.md` (przenosi wykonane rzeczy do „Zrobione”),
+    - przygotowuje i wykonuje **jeden commit** z czytelnym opisem dnia,
+  - użytkownik:
+    - może następnie wykonać `Push` w GitHub Desktop (lub poprosić asystenta o `git push`).
+- Dzięki temu po zakończeniu dnia:
+  - stan kodu + notatki z dnia są zawsze utrwalone w jednym commicie,
+  - druga maszyna widzi pełen kontekst po zwykłym `pull`.

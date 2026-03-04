@@ -9476,7 +9476,12 @@ void   MainWindow::SlotLoadRawDataMaskAsUCharArray(const QString& maskBinaryName
 
 	if (MainListItem != NULL)
 	{
-
+		int n[3];
+		double scale[3];
+		double origin[3];
+		data->GetN(n);
+		data->GetScale(scale);
+		data->GetOrigin(origin);
 
 		QFileInfo check_file(maskBinaryName);
 		// check if file exists and if yes: Is it really a file and no directory?
@@ -9512,6 +9517,15 @@ void   MainWindow::SlotLoadRawDataMaskAsUCharArray(const QString& maskBinaryName
 
 					SlotUpdateDefaultDir(maskBinaryName, 0);
 					this->SlotUpdateVolumeMask();
+
+					RawDataSet* labelData = new RawDataSet(n, scale, origin, 0, true);
+					labelData->SetRawDataSetName(data->GetRawDataSetName() + "-mask");
+					unsigned short* q = labelData->GetDataArray();
+					for (int i = 0; i < volSize; ++i)
+					{
+						q[i] = static_cast<unsigned short>(MaskData[i]);
+					}
+					InsertRawDataSet(labelData);
 
 				}
 
@@ -64184,6 +64198,7 @@ void MainWindow::SlotGenerateMaskUsingJadraSegmentator()
 
 	if (jadraSegmentatorPythonPath.isEmpty() || jadraSegmentatorScriptPath.isEmpty() || jadraSegmentatorConfigPath.isEmpty() || jadraSegmentatorCheckpointPath.isEmpty())
 	{
+		SlotAddLogText2("JadraSegmentator: missing config (python_path/script_path/config_path/checkpoint_path)");
 		emit SendMessage("JadraSegmentator: missing config (python_path/script_path/config_path/checkpoint_path)");
 		return;
 	}
@@ -64223,6 +64238,7 @@ void MainWindow::SlotGenerateMaskUsingJadraSegmentator()
 
 	if (!QFileInfo(scriptAbs).exists())
 	{
+		SlotAddLogText2("JadraSegmentator: script not found: " + scriptAbs);
 		emit SendMessage("JadraSegmentator: script not found: " + scriptAbs);
 		return;
 	}
@@ -64235,6 +64251,14 @@ void MainWindow::SlotGenerateMaskUsingJadraSegmentator()
 	args << "--config" << configAbs;
 	args << "--checkpoint" << checkpointAbs;
 	args << "--output_mask" << maskPath;
+
+	SlotAddLogText2("JadraSegmentator: python   = " + pythonAbs);
+	SlotAddLogText2("JadraSegmentator: workDir  = " + workDir);
+	SlotAddLogText2("JadraSegmentator: script   = " + scriptAbs);
+	SlotAddLogText2("JadraSegmentator: rdata    = " + dataPath);
+	SlotAddLogText2("JadraSegmentator: config   = " + configAbs);
+	SlotAddLogText2("JadraSegmentator: checkpoint = " + checkpointAbs);
+	SlotAddLogText2("JadraSegmentator: maskOut  = " + maskPath);
 
 	QCoreApplication::processEvents();
 
@@ -64255,6 +64279,7 @@ void MainWindow::SlotGenerateMaskUsingJadraSegmentator()
 
 	if (!ok)
 	{
+		SlotAddLogText2("JadraSegmentator: process did not finish, error=" + process.errorString());
 		emit SendMessage("JadraSegmentator: process did not finish");
 		return;
 	}
@@ -64265,10 +64290,12 @@ void MainWindow::SlotGenerateMaskUsingJadraSegmentator()
 		QString err = QString::fromLocal8Bit(process.readAllStandardError());
 		if (err.isEmpty())
 			err = QString::fromLocal8Bit(process.readAllStandardOutput());
+		SlotAddLogText2("JadraSegmentator: failed, exitCode=" + QString::number(exitCode) + " " + err);
 		emit SendMessage("JadraSegmentator: failed, exitCode=" + QString::number(exitCode) + " " + err);
 		return;
 	}
 
+	SlotAddLogText2("JadraSegmentator: finished, loading mask: " + maskPath);
 	SlotLoadRawDataMaskAsUCharArray(maskPath);
 	if (this->isVolumeVisible == true)
 	{
