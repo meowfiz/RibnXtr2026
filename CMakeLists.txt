@@ -2,21 +2,22 @@ cmake_minimum_required(VERSION 3.17)
 
 project(RibnXtr2023 LANGUAGES C CXX)
 
-# ---- MSVC / build quality ----
+# ---- Qt automoc/uic ----
+set(CMAKE_INCLUDE_CURRENT_DIR ON)
+set(CMAKE_AUTOMOC ON)
+set(CMAKE_AUTOUIC ON)
+
+# Prefer explicit Qt5_DIR from deps.cmake; fallback to QTDIR env if set
+if(DEFINED ENV{QTDIR} AND NOT DEFINED Qt5_DIR)
+  list(APPEND CMAKE_PREFIX_PATH "$ENV{QTDIR}")
+endif()
+
+# ---- MSVC: multiprocessor compilation ----
 if(MSVC)
   add_compile_options(/MP)
 endif()
 
 # ---- Qt ----
-set(CMAKE_INCLUDE_CURRENT_DIR ON)
-set(CMAKE_AUTOMOC ON)
-set(CMAKE_AUTOUIC ON)
-
-# Prefer explicit Qt5_DIR; fallback to QTDIR if set
-if(DEFINED ENV{QTDIR} AND NOT DEFINED Qt5_DIR)
-  list(APPEND CMAKE_PREFIX_PATH "$ENV{QTDIR}")
-endif()
-
 find_package(Qt5 REQUIRED COMPONENTS
   Core Gui Widgets Network Multimedia MultimediaWidgets
 )
@@ -24,30 +25,23 @@ find_package(Qt5 REQUIRED COMPONENTS
 # ---- OpenMP ----
 find_package(OpenMP REQUIRED)
 
-# ---- Kinect (custom Find-module) ----
+# ---- Kinect SDK v2 (custom Find-module from repo) ----
 list(APPEND CMAKE_MODULE_PATH "${CMAKE_SOURCE_DIR}/cmake/Modules")
 find_package(KinectSDK2 REQUIRED)
 
 # ---- OpenCV ----
 find_package(OpenCV REQUIRED)
 
-# ---- VTK ----
-if(NOT VTK_DIR AND DEFINED ENV{VTK_DIR})
-  set(VTK_DIR "$ENV{VTK_DIR}")
-endif()
-find_package(VTK REQUIRED)
-
 # ---- ITK ----
-if(NOT ITK_DIR AND DEFINED ENV{ITK_DIR})
-  set(ITK_DIR "$ENV{ITK_DIR}")
-endif()
+# IMPORTANT: DO NOT call find_package(VTK) here.
+# TubeTK/ITK may pull VTK internally and double-import causes target conflicts.
 find_package(ITK REQUIRED)
 include(${ITK_USE_FILE})
 
 # ---- Armadillo ----
 find_package(Armadillo REQUIRED)
 
-# ---- Our code ----
+# ---- Our code paths ----
 set(INCLUDE_DIR "${CMAKE_SOURCE_DIR}/project_files/RibnXtr2022-project_files/ribnxtr2_Files/src/include")
 set(SOURCE_DIR  "${CMAKE_SOURCE_DIR}/project_files/RibnXtr2022-project_files/ribnxtr2_Files/src/source")
 set(RUN_DIR     "${CMAKE_SOURCE_DIR}/project_files/RibnXtr2022-project_files/ribnxtr2_Files/run_files")
@@ -65,8 +59,7 @@ else()
   add_executable(RibnXtr2023 ${SOURCES})
 endif()
 
-# ---- Local deps from deps.cmake (QtXlsx / FFmpeg) ----
-# (muszą być ustawione w deps.cmake)
+# ---- Local deps from deps.cmake (required) ----
 if(NOT DEFINED QTXLSX_INCLUDE_DIR)
   message(FATAL_ERROR "QTXLSX_INCLUDE_DIR not set (set it in deps.cmake)")
 endif()
@@ -74,36 +67,33 @@ if(NOT DEFINED QTXLSX_LIB)
   message(FATAL_ERROR "QTXLSX_LIB not set (set it in deps.cmake)")
 endif()
 
-# FFmpeg jest opcjonalny jeśli używasz
-# Linkujemy tylko gdy podane są wszystkie zmienne FFmpeg.
-set(_FFMPEG_READY FALSE)
-if(DEFINED FFMPEG_INCLUDE_DIR
-   AND DEFINED FFMPEG_AVCODEC_LIB
-   AND DEFINED FFMPEG_AVFORMAT_LIB
-   AND DEFINED FFMPEG_SWSCALE_LIB
-   AND DEFINED FFMPEG_AVUTIL_LIB)
-  set(_FFMPEG_READY TRUE)
-elseif(DEFINED FFMPEG_INCLUDE_DIR
-       OR DEFINED FFMPEG_AVCODEC_LIB
-       OR DEFINED FFMPEG_AVFORMAT_LIB
-       OR DEFINED FFMPEG_SWSCALE_LIB
-       OR DEFINED FFMPEG_AVUTIL_LIB)
-  message(WARNING "Partial FFmpeg configuration detected; define all FFMPEG_* vars or none. FFmpeg linkage will be skipped.")
+# FFmpeg: jeśli używasz w kodzie, ustaw w deps.cmake; jeśli nie, zostaw puste
+# (CMake przełknie puste stringi w linkowaniu, ale lepiej mieć ustawione)
+if(NOT DEFINED FFMPEG_INCLUDE_DIR)
+  set(FFMPEG_INCLUDE_DIR "" CACHE PATH "")
+endif()
+if(NOT DEFINED FFMPEG_AVCODEC_LIB)
+  set(FFMPEG_AVCODEC_LIB "" CACHE FILEPATH "")
+  set(FFMPEG_AVFORMAT_LIB "" CACHE FILEPATH "")
+  set(FFMPEG_SWSCALE_LIB "" CACHE FILEPATH "")
+  set(FFMPEG_AVUTIL_LIB "" CACHE FILEPATH "")
 endif()
 
+# ---- Includes (target-scoped) ----
 target_include_directories(RibnXtr2023 PRIVATE
   "${INCLUDE_DIR}"
   "${SOURCE_DIR}"
+
   "${OpenCV_INCLUDE_DIRS}"
   "${ARMADILLO_INCLUDE_DIRS}"
+
   "${QTXLSX_INCLUDE_DIR}"
+  "${FFMPEG_INCLUDE_DIR}"
+
   ${KinectSDK2_INCLUDE_DIRS}
 )
 
-if(_FFMPEG_READY)
-  target_include_directories(RibnXtr2023 PRIVATE "${FFMPEG_INCLUDE_DIR}")
-endif()
-
+# ---- Link ----
 target_link_libraries(RibnXtr2023 PRIVATE
   Qt5::Core
   Qt5::Gui
@@ -112,7 +102,6 @@ target_link_libraries(RibnXtr2023 PRIVATE
   Qt5::Multimedia
   Qt5::MultimediaWidgets
 
-  ${VTK_LIBRARIES}
   ${ITK_LIBRARIES}
   ${ARMADILLO_LIBRARIES}
   ${OpenCV_LIBS}
@@ -122,18 +111,14 @@ target_link_libraries(RibnXtr2023 PRIVATE
 
   "${QTXLSX_LIB}"
   Iphlpapi.lib
+
+  "${FFMPEG_AVCODEC_LIB}"
+  "${FFMPEG_AVFORMAT_LIB}"
+  "${FFMPEG_SWSCALE_LIB}"
+  "${FFMPEG_AVUTIL_LIB}"
 )
 
-if(_FFMPEG_READY)
-  target_link_libraries(RibnXtr2023 PRIVATE
-    "${FFMPEG_AVCODEC_LIB}"
-    "${FFMPEG_AVFORMAT_LIB}"
-    "${FFMPEG_SWSCALE_LIB}"
-    "${FFMPEG_AVUTIL_LIB}"
-  )
-endif()
-
-# ---- MSVC runtime/run dir ----
+# ---- VS debugger working dir ----
 if(MSVC)
   set_property(TARGET RibnXtr2023 PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${RUN_DIR}")
   set_target_properties(RibnXtr2023 PROPERTIES LINK_FLAGS "/SUBSYSTEM:CONSOLE")
