@@ -167,6 +167,22 @@ Szczegóły i kroki są w `README.md`, tu tylko **zarys**:
 
 ---
 
+## 9. Konfiguracje `config.ini` per maszyna
+
+- W katalogu `run_files` trzymamy **wersjonowane szablony konfiguracji**:
+  - `config.sample.ini` – ogólny wzorzec (`[DopplerSegmentator]`, `[JadraSegmentator]`),
+  - `config.machine1.ini` – przykładowa konfiguracja dla machine 1 (laptop),
+  - `config.machine2.ini` – przykładowa konfiguracja dla machine 2 (desktop).
+- Plik **`config.ini` jest lokalny i ignorowany przez git**:
+  - na każdej maszynie użytkownik kopiuje odpowiedni plik:
+    - na machine 1: `config.machine1.ini` → `config.ini` (i w razie potrzeby modyfikuje ścieżki),
+    - na machine 2: `config.machine2.ini` → `config.ini` (jw.).
+  - dzięki temu:
+    - istotne ścieżki (Python, modele, dane) są zapisane w repo (w `config.machine*.ini` i `config.sample.ini`),
+    - jednocześnie lokalny `config.ini` może zawierać specyficzne ustawienia bez ryzyka przypadkowego commitu.
+
+---
+
 ## 7. Zasady commitów (Git)
 
 - Każdy commit powinien mieć:
