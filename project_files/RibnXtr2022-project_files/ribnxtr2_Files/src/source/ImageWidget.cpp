@@ -83,6 +83,7 @@ ImageWidget::ImageWidget(QWidget *pWidget, const char *name, Qt::WindowFlags f) 
 	XIParamTab = NULL;
 	YIParamTab = NULL;
 	m_Image = NULL;
+	m_paintMutex = NULL;
 	this->setMouseTracking(true);
 
 
@@ -224,6 +225,11 @@ void ImageWidget::paintEvent(QPaintEvent*)
 
 	if ((ImageExists == true) && (BlockRepaint == false))
 	{
+		struct OptionalPaintLock {
+			QMutex* m;
+			OptionalPaintLock(QMutex* mx) : m(mx) { if (m) m->lock(); }
+			~OptionalPaintLock() { if (m) m->unlock(); }
+		} paintLock(m_paintMutex);
 		//			QString aa="Paint Event"+QString::number(CrossType)+" "+QString(parent()->name());
 		//qWarning(aa);
 		//QPainter *Painter=new QPainter(this);
@@ -418,7 +424,7 @@ void ImageWidget::paintEvent(QPaintEvent*)
 		if ((mask != NULL) && (maskColor != NULL))
 		{
 
-			// tu chcÍ namalowaÊ po kolei - mask, mask2 oraz vol pts
+			// tu chcù namalowaù po kolei - mask, mask2 oraz vol pts
 			ScaleNearest(tmpMask, mask, w1, h1, w2, h2);
 			unsigned int *bits = (unsigned int *)maskImage->bits();
 
@@ -1014,7 +1020,7 @@ void ImageWidget::paintEvent(QPaintEvent*)
 		if ((mask != NULL) && (liveMaskTrace == true))
 		{
 
-			//skalujÍ maskÍ do rozmiarow rysunku za pomoca nearest
+			//skalujù maskù do rozmiarow rysunku za pomoca nearest
 			QPainter painter(this); painter.setClipRect(cliprect);
 
 			//znajduje granice maski
@@ -1091,7 +1097,7 @@ void ImageWidget::paintEvent(QPaintEvent*)
 			painter.drawPoints(borders1);
 			//	qDebug() << Name << "-5.05";
 			//robie dylacje
-			//punkty dylacji rysujÍ na obrazku jako punkty painterem.
+			//punkty dylacji rysujù na obrazku jako punkty painterem.
 
 
 		}
@@ -3407,7 +3413,7 @@ void ImageWidget::MagnifyignGlassMask(QImage *img)
 
 
 		unsigned int *bits = (unsigned int *)img->bits();
-		// wyczyszcze te ktore sπ poza maskπ z shapes
+		// wyczyszcze te ktore sù poza maskù z shapes
 		int pos = 0;
 		unsigned int white = QColor(255, 255, 255).rgb();
 		//unsigned int black = Qt::black;

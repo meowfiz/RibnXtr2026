@@ -3632,6 +3632,16 @@ qtab->setScrollWidget(PaletteTab);
 	gridBlob->addWidget(kinectBlobRoiSlider[2], 1, 1);
 	gridBlob->addWidget(new QLabel("maxY", gbBlobRoi), 1, 2);
 	gridBlob->addWidget(kinectBlobRoiSlider[3], 1, 3);
+	// Wierzchołki czworokąta (x,y) – 2×2 zwarte
+	gridBlob->addWidget(new QLabel(tr("Vertices (x,y):"), gbBlobRoi), 2, 0, 1, 2);
+	for (int i = 0; i < 4; i++)
+	{
+		kinectVertexLabel[i] = new QLabel(QString("P%1: (0, 0)").arg(i), gbBlobRoi);
+		kinectVertexLabel[i]->setMinimumWidth(72);
+		gridBlob->addWidget(kinectVertexLabel[i], 3 + i / 2, (i % 2) * 2, 1, 2);
+	}
+	kinectResetCropButton = new QPushButton2(buttonList, tr("Reset crop"), gbBlobRoi);
+	gridBlob->addWidget(kinectResetCropButton, 5, 0, 1, 4);
 	Gb3->layout()->addWidget(gbBlobRoi);
 	for (int i = 0; i < 5; i++)
 	{
@@ -3680,7 +3690,7 @@ qtab->setScrollWidget(PaletteTab);
 
 	// phase one
 	//QLabel *label;
-	QString names[] = { "Kinect", "Filtering","VolumeMask","Time","useBackground","Blobs","Rgb","Stop","FlipYCam","KinXFilip","KinYFlip","KinDFlip","KinDTop" };
+	QString names[] = { "Kinect", "Filtering","VolumeMask","Time","useBackground","Blobs","Rgb","Stop","FlipYCam","KinXFilip","KinYFlip","KinDFlip","KinDTop", "ShowBlobROI", "ShowCropQuad" };
 	//label = new QLabel(w1); label->setText("phase0"); w1->layout()->addWidget(label);
 	for (int i = 0; i < NUMBER_OF_KIN_CHECKBOXES; i++)
 	{
@@ -3692,6 +3702,8 @@ qtab->setScrollWidget(PaletteTab);
 
 		}
 	}
+	kinectOptionsCheckBox[13]->setChecked(true);  // ShowBlobROI – domyślnie widoczny
+	kinectOptionsCheckBox[14]->setChecked(true);  // ShowCropQuad – domyślnie widoczny
 
 
 	

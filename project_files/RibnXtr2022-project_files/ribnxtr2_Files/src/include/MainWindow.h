@@ -418,6 +418,7 @@ public:
 	bool sthTest;
 	ImageWidget *kinectImageWidget;
 	ImageWidget *statisticsWidget;
+	QMutex m_kinectPreviewMutex;  // chroni dostęp do obrazu podglądu Kinecta (wątek roboczy vs paintEvent)
 	qint64 m_lastKinectPreviewUpdate = 0;  // throttle odświeżania podglądu (~30 fps), żeby zmniejszyć „skakanie”
 	bool kinInit = false;
 	bool kinectFiltering = false;
@@ -1176,6 +1177,7 @@ public:
 	void	DisconnectAllFastFilters();
 
 	void GetHomographyMap();
+	void UpdateKinectVertexLabels();
 
 	bool calibrateDepthMap;
 
@@ -1465,6 +1467,7 @@ public:
 	void	SlotKinectGetBackgroundFrame();
 	void	SlotMouseReleased();
 	void	SlotKinectCalibrate();
+	void	SlotKinectResetCrop();
 	void	SlotGrabBackgroundDepth();
 	void	SlotKinectFrustumGen();
 	void	SlotUpdateKinectSettings();

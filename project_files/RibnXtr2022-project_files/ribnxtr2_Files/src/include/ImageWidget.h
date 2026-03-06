@@ -10,6 +10,7 @@
 #include	<qpainter.h>
 #include	<QPolygon>
 #include	<qbrush.h>
+#include	<QMutex>
 #
 //Added by qt3to4:
 #include <QPaintEvent>
@@ -74,6 +75,9 @@ public:
 	virtual	void	SetInterpolation(int Value);
 
 	QImage *		GetCurrentImage() { return m_Image; };
+
+	/** Opcjonalny mutex: jeśli ustawiony, paintEvent blokuje go na czas malowania (np. podgląd Kinecta z wątku roboczego). */
+	void SetPaintMutex(QMutex* m) { m_paintMutex = m; }
 
 	void	SetObjectTexts(QStringList texts) { objectTexts = texts; };
 	void	SetPos3D(int pos[3]) { pos3D[0] = pos[0]; pos3D[1] = pos[1]; pos3D[2] = pos[2]; }
@@ -164,6 +168,7 @@ protected:
 	QString Name;
 
 	QImage *m_Image;
+	QMutex* m_paintMutex;
 	int		m_rx;
 	int		m_ry;
 	double	m_dx;

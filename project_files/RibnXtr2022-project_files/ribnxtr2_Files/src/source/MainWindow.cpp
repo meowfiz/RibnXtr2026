@@ -622,7 +622,7 @@ MainWindow::MainWindow(int modex, QWidget* parent, const char* name, Qt::WindowF
 	kinectImageWidget->setValues(infoImg, ssizex, ssizey, 0, 0);
 	kinectImageWidget->setFixedHeight(ssizey);
 	kinectImageWidget->setFixedWidth(ssizex);
-
+	kinectImageWidget->SetPaintMutex(&m_kinectPreviewMutex);
 
 	kinectImageWidget->hide();
 
@@ -4032,6 +4032,7 @@ MainWindow::MainWindow(int modex, QWidget* parent, const char* name, Qt::WindowF
 
 	connect(GUIPanel->kinectFrustumButton, SIGNAL(clicked()), this, SLOT(SlotKinectFrustumGen()));
 	connect(GUIPanel->kinectCalibrateButton, SIGNAL(clicked()), this, SLOT(SlotKinectCalibrate()));
+	connect(GUIPanel->kinectResetCropButton, SIGNAL(clicked()), this, SLOT(SlotKinectResetCrop()));
 	connect(GUIPanel->kinectGrabBackgroundDepthButton, SIGNAL(clicked()), this, SLOT(SlotGrabBackgroundDepth()));
 
 
@@ -5778,9 +5779,12 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 						roiMaxX = qMax(0, qMin(roiMaxX, mWindow->m_depthWidth - 1));
 						roiMinY = qMax(0, qMin(roiMinY, mWindow->m_depthHeight - 1));
 						roiMaxY = qMax(0, qMin(roiMaxY, mWindow->m_depthHeight - 1));
-						QPainter pKin(mWindow->kinectImageWidget->GetCurrentImage());
-						pKin.setPen(QPen(Qt::cyan, 2));
-						pKin.drawRect(roiMinX, roiMinY, roiMaxX - roiMinX, roiMaxY - roiMinY);
+						if (mWindow->GUIPanel->kinectOptionsCheckBox[13]->isChecked())
+						{
+							QPainter pKin(mWindow->kinectImageWidget->GetCurrentImage());
+							pKin.setPen(QPen(Qt::cyan, 2));
+							pKin.drawRect(roiMinX, roiMinY, roiMaxX - roiMinX, roiMaxY - roiMinY);
+						}
 						qint64 now = QDateTime::currentMSecsSinceEpoch();
 						if (now - mWindow->m_lastKinectPreviewUpdate >= 33) {
 							mWindow->m_lastKinectPreviewUpdate = now;
@@ -6264,7 +6268,8 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 
 				mWindow->countFps();
 				QPainter p(mWindow->kinectImageWidget->GetCurrentImage());
-				// Prostokąt Blob ROI na podglądzie
+				// Niebieski Blob ROI – tylko gdy checkbox włączony
+				if (mWindow->GUIPanel->kinectOptionsCheckBox[13]->isChecked())
 				{
 					int roiMinX = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[0]->value() * mWindow->m_depthWidth / 10000);
 					int roiMaxX = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[1]->value() * mWindow->m_depthWidth / 10000);
@@ -6289,25 +6294,18 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 
 				if (sBlock[0] > 0)
 				{
-					//for (i = 0; i < 3; i++)
-					//{
-
 					double* p0 = sBlock;
 					double* p1 = sBlock + 2;
 					double* p2 = sBlock + 4;
 					double* p3 = sBlock + 6;
 
-					p.drawLine(p0[0], p0[1], p1[0], p1[1]);
-					p.drawLine(p2[0], p2[1], p3[0], p3[1]);
-					p.drawLine(p0[0], p0[1], p2[0], p2[1]);
-					p.drawLine(p1[0], p1[1], p3[0], p3[1]);
-
+					// Czworokąt (bez przekątnych – tylko obwód P0–P1–P2–P3–P0)
 					QPolygonF poly;
-					poly.append(QPoint(p0[0], p0[1]));
-					poly.append(QPoint(p1[0], p1[1]));
-					poly.append(QPoint(p2[0], p2[1]));
-					poly.append(QPoint(p3[0], p3[1]));
-					p.setPen(Qt::green);
+					poly.append(QPointF(p0[0], p0[1]));
+					poly.append(QPointF(p1[0], p1[1]));
+					poly.append(QPointF(p2[0], p2[1]));
+					poly.append(QPointF(p3[0], p3[1]));
+					p.setPen(QPen(Qt::green, 2));
 					p.drawPolygon(poly);
 
 					// Czerwone kółka wokół środków wybranych blobów (sBlock)
@@ -6342,26 +6340,25 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 						p.drawText(10, 60 + i * 10, "lengths: " + QString::number(d[i]));
 
 				}
-				int* kinectCorners = mWindow->kinectCorners;
-				p.setPen(Qt::yellow);
-				QPolygonF poly;
-				poly.append(QPoint(kinectCorners[0], kinectCorners[1]));
-				poly.append(QPoint(kinectCorners[2], kinectCorners[3]));
-				poly.append(QPoint(kinectCorners[4], kinectCorners[5]));
-				poly.append(QPoint(kinectCorners[6], kinectCorners[7]));
-
-				p.drawPolygon(poly);
-
-				p.setPen(Qt::green);
-
-				int d[4];
-
-
-				for (i = 0; i < 4; i++)
+				// Żółty czworokąt (crop) + etykiety depth – tylko gdy checkbox włączony
+				if (mWindow->GUIPanel->kinectOptionsCheckBox[14]->isChecked())
 				{
-					d[i] = destBuffer[kinectCorners[i * 2] + kinectCorners[i * 2 + 1] * mWindow->m_depthWidth];
+					int* kinectCorners = mWindow->kinectCorners;
+					QPolygonF polyQuad;
+					polyQuad.append(QPointF(kinectCorners[0], kinectCorners[1]));
+					polyQuad.append(QPointF(kinectCorners[2], kinectCorners[3]));
+					polyQuad.append(QPointF(kinectCorners[4], kinectCorners[5]));
+					polyQuad.append(QPointF(kinectCorners[6], kinectCorners[7]));
+					p.setPen(QPen(Qt::yellow, 2));
+					p.drawPolygon(polyQuad);
 
-					p.drawText(kinectCorners[i * 2] + 5, kinectCorners[i * 2 + 1] + 5, "depth: " + QString::number(d[i]));
+					p.setPen(Qt::green);
+					int d[4];
+					for (i = 0; i < 4; i++)
+					{
+						d[i] = destBuffer[kinectCorners[i * 2] + kinectCorners[i * 2 + 1] * mWindow->m_depthWidth];
+						p.drawText(kinectCorners[i * 2] + 5, kinectCorners[i * 2 + 1] + 5, "depth: " + QString::number(d[i]));
+					}
 				}
 
 				qint64 now = QDateTime::currentMSecsSinceEpoch();
@@ -52046,7 +52043,7 @@ void MainWindow::SetupGlobalAppSettings()
 			kinectCorners[i] = kC[i];
 	}
 
-
+	UpdateKinectVertexLabels();
 
 	if (kinCalibrated == false) GetHomographyMap();
 
@@ -55141,12 +55138,48 @@ void MainWindow::SlotKinectCalibrate()
 		}
 
 		GetHomographyMap();
-
-
+		UpdateKinectVertexLabels();
 
 		sett.endGroup();
 
 	}
+}
+//--------------------------------------
+void MainWindow::SlotKinectResetCrop()
+{
+	int W = kinect2Init ? m_depthWidth : 512;
+	int H = kinect2Init ? m_depthHeight : 424;
+
+	kinectCrop[0] = 0;
+	kinectCrop[1] = 0;
+	kinectCrop[2] = W;
+	kinectCrop[3] = H;
+
+	// Pełna klatka: 4 narożniki (0,0), (W-1,0), (W-1,H-1), (0,H-1)
+	kinectCorners[0] = 0;   kinectCorners[1] = 0;
+	kinectCorners[2] = W - 1; kinectCorners[3] = 0;
+	kinectCorners[4] = W - 1; kinectCorners[5] = H - 1;
+	kinectCorners[6] = 0;   kinectCorners[7] = H - 1;
+
+	for (int i = 0; i < 8; i++)
+		sBlock[i] = kinectCorners[i];
+
+	QSettings sett(configIniName, QSettings::IniFormat);
+	sett.beginGroup("Kinect-Vol");
+	for (int i = 0; i < 8; i++)
+		sett.setValue("kinectCorners" + QString::number(i), kinectCorners[i]);
+	for (int i = 0; i < 4; i++)
+		sett.setValue("kinectCrop" + QString::number(i), kinectCrop[i]);
+	sett.endGroup();
+
+	GetHomographyMap();
+	UpdateKinectVertexLabels();
+}
+//--------------------------------------
+void MainWindow::UpdateKinectVertexLabels()
+{
+	for (int i = 0; i < 4; i++)
+		GUIPanel->kinectVertexLabel[i]->setText(QString("P%1: (%2, %3)").arg(i).arg(kinectCorners[i * 2]).arg(kinectCorners[i * 2 + 1]));
 }
 //-----------------------------
 void MainWindow::GetHomographyMap()
