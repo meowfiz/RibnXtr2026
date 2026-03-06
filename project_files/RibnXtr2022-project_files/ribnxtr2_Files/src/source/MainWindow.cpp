@@ -1,5 +1,6 @@
 #include	"MainWindow.h"
 //Added by qt3to4:
+#include <QMutexLocker>
 #include <QPolygon>
 #include <QMouseEvent>
 //#include <QVBoxLayout>
@@ -5767,7 +5768,7 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 						}
 					}
 
-					// Rysowanie prostokąta Blob ROI na podglądzie Kinecta
+					// Rysowanie prostokąta Blob ROI na podglądzie Kinecta (chronione mutexem – wątek vs paintEvent)
 					{
 						int roiMinX = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[0]->value() * mWindow->m_depthWidth / 10000);
 						int roiMaxX = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[1]->value() * mWindow->m_depthWidth / 10000);
@@ -5781,6 +5782,7 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 						roiMaxY = qMax(0, qMin(roiMaxY, mWindow->m_depthHeight - 1));
 						if (mWindow->GUIPanel->kinectOptionsCheckBox[13]->isChecked())
 						{
+							QMutexLocker lock(&mWindow->m_kinectPreviewMutex);
 							QPainter pKin(mWindow->kinectImageWidget->GetCurrentImage());
 							pKin.setPen(QPen(Qt::cyan, 2));
 							pKin.drawRect(roiMinX, roiMinY, roiMaxX - roiMinX, roiMaxY - roiMinY);
@@ -6081,11 +6083,12 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 					// na podstawie najmniejszej odległości.
 					if (nrOfBlobs >= 4)
 					{
+						// Kolejność: TL, TR, BR, BL (obiegnięcie prostokąta – bez przekątnych przy rysowaniu)
 						double pts[8] = {
 							0.0, 0.0,
 							(double)(mWindow->m_depthWidth - 1), 0.0,
-							0.0, (double)(mWindow->m_depthHeight - 1),
-							(double)(mWindow->m_depthWidth - 1), (double)(mWindow->m_depthHeight - 1)
+							(double)(mWindow->m_depthWidth - 1), (double)(mWindow->m_depthHeight - 1),
+							0.0, (double)(mWindow->m_depthHeight - 1)
 						};
 
 						for (int j2 = 0; j2 < 4; ++j2)
@@ -6267,7 +6270,9 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 
 
 				mWindow->countFps();
-				QPainter p(mWindow->kinectImageWidget->GetCurrentImage());
+				{
+					QMutexLocker lock(&mWindow->m_kinectPreviewMutex);
+					QPainter p(mWindow->kinectImageWidget->GetCurrentImage());
 				// Niebieski Blob ROI – tylko gdy checkbox włączony
 				if (mWindow->GUIPanel->kinectOptionsCheckBox[13]->isChecked())
 				{
@@ -6340,15 +6345,27 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 						p.drawText(10, 60 + i * 10, "lengths: " + QString::number(d[i]));
 
 				}
-				// Żółty czworokąt (crop) + etykiety depth – tylko gdy checkbox włączony
+				// Żółty czworokąt (crop) – sortowanie wierzchołków po kącie od centroidu, żeby zawsze rysować obwód (nie X)
 				if (mWindow->GUIPanel->kinectOptionsCheckBox[14]->isChecked())
 				{
-					int* kinectCorners = mWindow->kinectCorners;
+					int* k = mWindow->kinectCorners;
+					QPointF pts[4] = {
+						QPointF(k[0], k[1]), QPointF(k[2], k[3]),
+						QPointF(k[4], k[5]), QPointF(k[6], k[7])
+					};
+					double cx = (k[0] + k[2] + k[4] + k[6]) / 4.0;
+					double cy = (k[1] + k[3] + k[5] + k[7]) / 4.0;
+					double angles[4];
+					for (int ii = 0; ii < 4; ii++)
+						angles[ii] = atan2(pts[ii].y() - cy, pts[ii].x() - cx);
+					int order[4] = { 0, 1, 2, 3 };
+					for (int ii = 0; ii < 3; ii++)
+						for (int jj = ii + 1; jj < 4; jj++)
+							if (angles[order[ii]] > angles[order[jj]])
+								{ int t = order[ii]; order[ii] = order[jj]; order[jj] = t; }
 					QPolygonF polyQuad;
-					polyQuad.append(QPointF(kinectCorners[0], kinectCorners[1]));
-					polyQuad.append(QPointF(kinectCorners[2], kinectCorners[3]));
-					polyQuad.append(QPointF(kinectCorners[4], kinectCorners[5]));
-					polyQuad.append(QPointF(kinectCorners[6], kinectCorners[7]));
+					for (int ii = 0; ii < 4; ii++)
+						polyQuad.append(pts[order[ii]]);
 					p.setPen(QPen(Qt::yellow, 2));
 					p.drawPolygon(polyQuad);
 
@@ -6356,8 +6373,8 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 					int d[4];
 					for (i = 0; i < 4; i++)
 					{
-						d[i] = destBuffer[kinectCorners[i * 2] + kinectCorners[i * 2 + 1] * mWindow->m_depthWidth];
-						p.drawText(kinectCorners[i * 2] + 5, kinectCorners[i * 2 + 1] + 5, "depth: " + QString::number(d[i]));
+						d[i] = destBuffer[k[i * 2] + k[i * 2 + 1] * mWindow->m_depthWidth];
+						p.drawText(k[i * 2] + 5, k[i * 2 + 1] + 5, "depth: " + QString::number(d[i]));
 					}
 				}
 
@@ -6365,6 +6382,7 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 				if (now - mWindow->m_lastKinectPreviewUpdate >= 33) {
 					mWindow->m_lastKinectPreviewUpdate = now;
 					mWindow->kinectImageWidget->update();
+				}
 				}
 				//delete[]cropBuffer;
 				//mWindow->depthBuffers[0]->locked = false;//odblokowac
