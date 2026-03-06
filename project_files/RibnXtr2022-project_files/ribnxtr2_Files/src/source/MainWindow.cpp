@@ -4019,6 +4019,8 @@ MainWindow::MainWindow(int modex, QWidget* parent, const char* name, Qt::WindowF
 	{
 		connect(GUIPanel->kinectSlider[i], SIGNAL(valueChanged(int)), this, SLOT(SlotCustomBox2Update(int)));
 	}
+	for (int i = 0; i < 4; i++)
+		connect(GUIPanel->kinectBlobRoiSlider[i], SIGNAL(valueChanged(int)), this, SLOT(SlotUpdateKinectSettings(int)));
 
 	for (i = 1; i < NUMBER_OF_KIN_CHECKBOXES; i++)
 		connect(GUIPanel->kinectOptionsCheckBox[i], SIGNAL(stateChanged(int)), this, SLOT(SlotUpdateKinectSettings(int)));
@@ -4894,6 +4896,33 @@ void	MainWindow::SlotKinectEnable(int aa)
 			m_colorBuffer = new uint32[1920 * 1080];
 			m_colorBuffer_back = new uint[1920 * 1080];
 
+			// Spróbuj wczytać zapisane tło RGB (GetBackground) z poprzednich uruchomień.
+			// Plik jest lokalny dla run_files (progDirPath) i nie trafia do repo.
+			{
+				QDir rDir(progDirPath);
+				QString bgPath = rDir.filePath("kinect_background_rgba_1920x1080.bin");
+				QFile bgFile(bgPath);
+				if (bgFile.open(QIODevice::ReadOnly))
+				{
+					QByteArray magic = bgFile.read(4);
+					if (magic == "KBG1")
+					{
+						QDataStream in(&bgFile);
+						in.setByteOrder(QDataStream::LittleEndian);
+						qint32 w = 0, h = 0;
+						in >> w >> h;
+						if (w == 1920 && h == 1080)
+						{
+							const int bytes = 1920 * 1080 * sizeof(uint32);
+							if (bgFile.read(reinterpret_cast<char*>(m_colorBuffer_back), bytes) != bytes)
+							{
+								// Niepełny plik – ignorujemy.
+							}
+						}
+					}
+				}
+			}
+
 			//get the coordinate mapper
 			hr = m_sensor->get_CoordinateMapper(&m_coordinateMapper);
 			if (FAILED(hr))
@@ -5735,9 +5764,30 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 						}
 					}
 
+					// Rysowanie prostokąta Blob ROI na podglądzie Kinecta
+					{
+						int roiMinX = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[0]->value() * mWindow->m_depthWidth / 10000);
+						int roiMaxX = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[1]->value() * mWindow->m_depthWidth / 10000);
+						int roiMinY = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[2]->value() * mWindow->m_depthHeight / 10000);
+						int roiMaxY = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[3]->value() * mWindow->m_depthHeight / 10000);
+						if (roiMinX > roiMaxX) { int t = roiMinX; roiMinX = roiMaxX; roiMaxX = t; }
+						if (roiMinY > roiMaxY) { int t = roiMinY; roiMinY = roiMaxY; roiMaxY = t; }
+						roiMinX = qMax(0, qMin(roiMinX, mWindow->m_depthWidth - 1));
+						roiMaxX = qMax(0, qMin(roiMaxX, mWindow->m_depthWidth - 1));
+						roiMinY = qMax(0, qMin(roiMinY, mWindow->m_depthHeight - 1));
+						roiMaxY = qMax(0, qMin(roiMaxY, mWindow->m_depthHeight - 1));
+						QPainter pKin(mWindow->kinectImageWidget->GetCurrentImage());
+						pKin.setPen(QPen(Qt::cyan, 2));
+						pKin.drawRect(roiMinX, roiMinY, roiMaxX - roiMinX, roiMaxY - roiMinY);
+						mWindow->kinectImageWidget->update();
+					}
+
 				}
 				else
 				{
+					// Brak wykrytego bloba – nie rysuj starego prostokąta
+					mWindow->sBlock[0] = -1;
+
 					//mWindow->m_kinect->getRGB(mWindow->rgb_buffer);
 
 
@@ -5794,12 +5844,13 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 
 								unsigned char val = 0;
 
-								//if ((g > threshold) && (r + 10 < g))
-								//	val = 255;//
 								QColor col(r, g, b);
 								int value = col.value();
+								int saturation = col.saturation();
 
-								if (value > threshold) val = 255;
+								// Jasność powyżej progu + niska saturacja (biały/szary), żeby odfiltrować niebieską ścianę
+								const int maxSaturation = 150;
+								if (value > threshold && saturation < maxSaturation) val = 1;
 
 								//(rgbData[posRgb + 1] > threshold) ? 1 : 0;
 								/**(dataX++) = Pal->R[val];
@@ -5817,7 +5868,28 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 						}
 					}
 
-
+					// Ograniczenie obszaru szukania blobów (Blob ROI) – zero poza prostokątem
+					int roiMinX = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[0]->value() * mWindow->m_depthWidth / 10000);
+					int roiMaxX = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[1]->value() * mWindow->m_depthWidth / 10000);
+					int roiMinY = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[2]->value() * mWindow->m_depthHeight / 10000);
+					int roiMaxY = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[3]->value() * mWindow->m_depthHeight / 10000);
+					if (roiMinX > roiMaxX) { int t = roiMinX; roiMinX = roiMaxX; roiMaxX = t; }
+					if (roiMinY > roiMaxY) { int t = roiMinY; roiMinY = roiMaxY; roiMaxY = t; }
+					roiMinX = qMax(0, qMin(roiMinX, mWindow->m_depthWidth - 1));
+					roiMaxX = qMax(0, qMin(roiMaxX, mWindow->m_depthWidth - 1));
+					roiMinY = qMax(0, qMin(roiMinY, mWindow->m_depthHeight - 1));
+					roiMaxY = qMax(0, qMin(roiMaxY, mWindow->m_depthHeight - 1));
+					for (int jj = 0; jj < mWindow->m_depthHeight; jj++)
+					{
+						for (int ii = 0; ii < mWindow->m_depthWidth; ii++)
+						{
+							if (ii < roiMinX || ii > roiMaxX || jj < roiMinY || jj > roiMaxY)
+							{
+								int pos0 = jj * mWindow->m_depthWidth + ii;
+								lightMask[pos0] = 0;
+							}
+						}
+					}
 
 					//dilate,
 					simple2DMophology(lightMask, mWindow->m_depthWidth, mWindow->m_depthHeight, 0, 0);
@@ -5862,11 +5934,13 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 
 
 
-					//sq
+					// Rozmiar blobów: count = liczba pikseli; suwaki 0..10000 -> skala *0.06 i kwadrat
 					int minBlobSize = mWindow->GUIPanel->kinectSlider[12]->value() * 0.06;
 					int maxBlobSize = mWindow->GUIPanel->kinectSlider[13]->value() * 0.06;
 					minBlobSize *= minBlobSize;
 					maxBlobSize *= maxBlobSize;
+					// Domyślnie oba=0 daje 0 i 0 -> żaden blob nie przechodzi; max=0 traktuj jako brak górnego limitu
+					if (maxBlobSize <= 0) maxBlobSize = 10000000;
 
 
 					bool blobFound = false;
@@ -6136,6 +6210,21 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 
 				mWindow->countFps();
 				QPainter p(mWindow->kinectImageWidget->GetCurrentImage());
+				// Prostokąt Blob ROI na podglądzie
+				{
+					int roiMinX = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[0]->value() * mWindow->m_depthWidth / 10000);
+					int roiMaxX = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[1]->value() * mWindow->m_depthWidth / 10000);
+					int roiMinY = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[2]->value() * mWindow->m_depthHeight / 10000);
+					int roiMaxY = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[3]->value() * mWindow->m_depthHeight / 10000);
+					if (roiMinX > roiMaxX) { int t = roiMinX; roiMinX = roiMaxX; roiMaxX = t; }
+					if (roiMinY > roiMaxY) { int t = roiMinY; roiMinY = roiMaxY; roiMaxY = t; }
+					roiMinX = qMax(0, qMin(roiMinX, mWindow->m_depthWidth - 1));
+					roiMaxX = qMax(0, qMin(roiMaxX, mWindow->m_depthWidth - 1));
+					roiMinY = qMax(0, qMin(roiMinY, mWindow->m_depthHeight - 1));
+					roiMaxY = qMax(0, qMin(roiMaxY, mWindow->m_depthHeight - 1));
+					p.setPen(QPen(Qt::cyan, 2));
+					p.drawRect(roiMinX, roiMinY, roiMaxX - roiMinX, roiMaxY - roiMinY);
+				}
 				p.fillRect(0, 0, 100, 20, Qt::black);
 				p.setPen(Qt::red);
 
@@ -6360,9 +6449,21 @@ MainWindow::~MainWindow()
 		delete img3D;
 		img3D = NULL;
 	}
-	if (kinectThread != NULL) kinectThread->terminate();
-	if (kinect3DThread != NULL) kinect3DThread->terminate();
-	if (cameraThread != NULL) cameraThread->terminate();
+	if (kinectThread != NULL)
+	{
+		kinectThread->requestInterruption();
+		kinectThread->wait();
+		delete kinectThread;
+		kinectThread = NULL;
+	}
+	if (kinect3DThread != NULL)
+	{
+		kinect3DThread->terminate();
+	}
+	if (cameraThread != NULL)
+	{
+		cameraThread->terminate();
+	}
 	//if (m_kinect != NULL)
 	//{
 	//	m_kinect->shutDownKinect();
@@ -55123,9 +55224,30 @@ void MainWindow::SlotKinectGetBackgroundFrame()
 		hr = colorFrame->CopyConvertedFrameDataToArray(
 			1920 * 1080 * 4, (BYTE*)m_colorBuffer_back, ColorImageFormat_Rgba);
 		if (FAILED(hr))
+		{
+			SafeRelease(colorFrame);
 			return;
+		}
 
 		SafeRelease(colorFrame);
+
+		// Zapisz tło RGB do pliku, aby można było użyć go po restarcie.
+		QDir rDir(progDirPath);
+		QString bgPath = rDir.filePath("kinect_background_rgba_1920x1080.bin");
+		QFile bgFile(bgPath);
+		if (bgFile.open(QIODevice::WriteOnly))
+		{
+			// prosty nagłówek: magic + szerokość/wysokość (little-endian)
+			bgFile.write("KBG1", 4);
+			QDataStream out(&bgFile);
+			out.setByteOrder(QDataStream::LittleEndian);
+			qint32 w = 1920;
+			qint32 h = 1080;
+			out << w << h;
+			const int bytes = 1920 * 1080 * sizeof(uint32);
+			bgFile.write(reinterpret_cast<const char*>(m_colorBuffer_back), bytes);
+			bgFile.close();
+		}
 
 	}
 
