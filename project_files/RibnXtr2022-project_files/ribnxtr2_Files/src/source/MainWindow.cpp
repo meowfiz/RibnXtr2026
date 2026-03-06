@@ -27,7 +27,7 @@ void KinectDrawThread::run()
 {
 	while (!isInterruptionRequested())
 	{
-		// Throttle the loop to avoid busy-spin when Kinect is disabled or frames are not available.
+		// Throttle the loop when Kinect is disabled or Stop is checked.
 		if (!mWindow || !mWindow->kinect2Init || !mWindow->kinectEnabled ||
 			(mWindow->GUIPanel && mWindow->GUIPanel->kinectOptionsCheckBox[7]->isChecked()))
 		{
@@ -618,6 +618,7 @@ MainWindow::MainWindow(int modex, QWidget* parent, const char* name, Qt::WindowF
 	int ssizey = 424;
 
 	QImage* infoImg = new QImage(ssizex, ssizey, QImage::Format_ARGB32);
+	infoImg->fill(0xFF000000);  // czarny, pełna nieprzezroczystość – unikamy szarego okna przed pierwszą klatką
 	kinectImageWidget->setValues(infoImg, ssizex, ssizey, 0, 0);
 	kinectImageWidget->setFixedHeight(ssizey);
 	kinectImageWidget->setFixedWidth(ssizex);
@@ -4021,6 +4022,7 @@ MainWindow::MainWindow(int modex, QWidget* parent, const char* name, Qt::WindowF
 	}
 	for (int i = 0; i < 4; i++)
 		connect(GUIPanel->kinectBlobRoiSlider[i], SIGNAL(valueChanged(int)), this, SLOT(SlotUpdateKinectSettings(int)));
+	connect(GUIPanel->kinectMaxSatSlider, SIGNAL(valueChanged(int)), this, SLOT(SlotUpdateKinectSettings(int)));
 
 	for (i = 1; i < NUMBER_OF_KIN_CHECKBOXES; i++)
 		connect(GUIPanel->kinectOptionsCheckBox[i], SIGNAL(stateChanged(int)), this, SLOT(SlotUpdateKinectSettings(int)));
@@ -4830,7 +4832,7 @@ void	MainWindow::SlotKinectEnable(int aa)
 	//{
 	//	// do nothing
 	//}
-	if ((mode == true)) //w��cz
+	if ((mode == true)) //włącz
 	{
 		if (kinect2Init == false)
 		{
@@ -4942,8 +4944,8 @@ void	MainWindow::SlotKinectEnable(int aa)
 			kinect2Init = true;
 			kinectImageWidget->show();
 
-			QObject::connect(GUIPanel->kinectSlider[0], SIGNAL(valueChanged(int)), this, SLOT(SlotKinectValueChanged0(int)));
-			//QObject::connect(this, SIGNAL(SignalKinectValueChanged0(double)), m_kinect, SLOT(setAngle(double)));
+		QObject::connect(GUIPanel->kinectSlider[0], SIGNAL(valueChanged(int)), this, SLOT(SlotKinectValueChanged0(int)));
+		//QObject::connect(this, SIGNAL(SignalKinectValueChanged0(double)), m_kinect, SLOT(setAngle(double)));
 			//QObject::connect(m_kinect, SIGNAL(signalFrameSent()), this, SLOT(SloInitKinectDone()));
 			//connect(kinectTimer, SIGNAL(timeout()), this, SLOT(SlotDrawKinectDepthMap()));
 			//connect(kinectTimer3D, SIGNAL(timeout()), this, SLOT(SlotRenderKinectDepthMap()));
@@ -5779,7 +5781,11 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 						QPainter pKin(mWindow->kinectImageWidget->GetCurrentImage());
 						pKin.setPen(QPen(Qt::cyan, 2));
 						pKin.drawRect(roiMinX, roiMinY, roiMaxX - roiMinX, roiMaxY - roiMinY);
-						mWindow->kinectImageWidget->update();
+						qint64 now = QDateTime::currentMSecsSinceEpoch();
+						if (now - mWindow->m_lastKinectPreviewUpdate >= 33) {
+							mWindow->m_lastKinectPreviewUpdate = now;
+							mWindow->kinectImageWidget->update();
+						}
 					}
 
 				}
@@ -5796,6 +5802,19 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 					int posRgb = 0;
 					bool useBackground = mWindow->GUIPanel->kinectOptionsCheckBox[4]->isChecked();
 					unsigned char* lightMask = new unsigned char[ssize];
+
+					int roiMinX = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[0]->value() * mWindow->m_depthWidth / 10000);
+					int roiMaxX = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[1]->value() * mWindow->m_depthWidth / 10000);
+					int roiMinY = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[2]->value() * mWindow->m_depthHeight / 10000);
+					int roiMaxY = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[3]->value() * mWindow->m_depthHeight / 10000);
+					if (roiMinX > roiMaxX) { int t = roiMinX; roiMinX = roiMaxX; roiMaxX = t; }
+					if (roiMinY > roiMaxY) { int t = roiMinY; roiMinY = roiMaxY; roiMaxY = t; }
+					roiMinX = qMax(0, qMin(roiMinX, mWindow->m_depthWidth - 1));
+					roiMaxX = qMax(0, qMin(roiMaxX, mWindow->m_depthWidth - 1));
+					roiMinY = qMax(0, qMin(roiMinY, mWindow->m_depthHeight - 1));
+					roiMaxY = qMax(0, qMin(roiMaxY, mWindow->m_depthHeight - 1));
+
+					int roiValMin = 255, roiValMax = 0, roiSatMin = 255, roiSatMax = 0;
 					int pos0 = 0;
 					for (j = 0; j < mWindow->m_depthHeight; j++)
 					{
@@ -5848,8 +5867,16 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 								int value = col.value();
 								int saturation = col.saturation();
 
-								// Jasność powyżej progu + niska saturacja (biały/szary), żeby odfiltrować niebieską ścianę
-								const int maxSaturation = 150;
+								if (i >= roiMinX && i <= roiMaxX && j >= roiMinY && j <= roiMaxY)
+								{
+									if (value < roiValMin) roiValMin = value;
+									if (value > roiValMax) roiValMax = value;
+									if (saturation < roiSatMin) roiSatMin = saturation;
+									if (saturation > roiSatMax) roiSatMax = saturation;
+								}
+
+								int maxSaturation = mWindow->GUIPanel->kinectMaxSatSlider->value();
+								if (maxSaturation < 1) maxSaturation = 1;
 								if (value > threshold && saturation < maxSaturation) val = 1;
 
 								//(rgbData[posRgb + 1] > threshold) ? 1 : 0;
@@ -5868,17 +5895,11 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 						}
 					}
 
+					if (roiValMax < roiValMin) { roiValMin = 0; roiValMax = 0; roiSatMin = 0; roiSatMax = 0; }
+					mWindow->GUIPanel->kinectLabel[2]->setText(
+						QString("ROI value %1-%2  sat %3-%4  thresh=%5").arg(roiValMin).arg(roiValMax).arg(roiSatMin).arg(roiSatMax).arg(threshold));
+
 					// Ograniczenie obszaru szukania blobów (Blob ROI) – zero poza prostokątem
-					int roiMinX = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[0]->value() * mWindow->m_depthWidth / 10000);
-					int roiMaxX = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[1]->value() * mWindow->m_depthWidth / 10000);
-					int roiMinY = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[2]->value() * mWindow->m_depthHeight / 10000);
-					int roiMaxY = (int)((long)mWindow->GUIPanel->kinectBlobRoiSlider[3]->value() * mWindow->m_depthHeight / 10000);
-					if (roiMinX > roiMaxX) { int t = roiMinX; roiMinX = roiMaxX; roiMaxX = t; }
-					if (roiMinY > roiMaxY) { int t = roiMinY; roiMinY = roiMaxY; roiMaxY = t; }
-					roiMinX = qMax(0, qMin(roiMinX, mWindow->m_depthWidth - 1));
-					roiMaxX = qMax(0, qMin(roiMaxX, mWindow->m_depthWidth - 1));
-					roiMinY = qMax(0, qMin(roiMinY, mWindow->m_depthHeight - 1));
-					roiMaxY = qMax(0, qMin(roiMaxY, mWindow->m_depthHeight - 1));
 					for (int jj = 0; jj < mWindow->m_depthHeight; jj++)
 					{
 						for (int ii = 0; ii < mWindow->m_depthWidth; ii++)
@@ -5891,8 +5912,8 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 						}
 					}
 
-					//dilate,
-					simple2DMophology(lightMask, mWindow->m_depthWidth, mWindow->m_depthHeight, 0, 0);
+					// Morfologia: bez pierwszej dylatacji (0,0) – nie łączymy dwóch blobów w jeden; tylko erozje do wygładzenia
+					// simple2DMophology(..., 0, 0);  // wyłączone – dylatacja łączyła sąsiednie markery
 					simple2DMophology(lightMask, mWindow->m_depthWidth, mWindow->m_depthHeight, 1, 0);
 					simple2DMophology(lightMask, mWindow->m_depthWidth, mWindow->m_depthHeight, 1, 1);
 					//detect blobs - licz area - wez 4 najwieksze
@@ -5935,8 +5956,8 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 
 
 					// Rozmiar blobów: count = liczba pikseli; suwaki 0..10000 -> skala *0.06 i kwadrat
-					int minBlobSize = mWindow->GUIPanel->kinectSlider[12]->value() * 0.06;
-					int maxBlobSize = mWindow->GUIPanel->kinectSlider[13]->value() * 0.06;
+					int minBlobSize = mWindow->GUIPanel->kinectSlider[9]->value() * 0.06;
+					int maxBlobSize = mWindow->GUIPanel->kinectSlider[10]->value() * 0.06;
 					minBlobSize *= minBlobSize;
 					maxBlobSize *= maxBlobSize;
 					// Domyślnie oba=0 daje 0 i 0 -> żaden blob nie przechodzi; max=0 traktuj jako brak górnego limitu
@@ -6051,6 +6072,39 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 					delete[]kernel;
 					delete[]kernelInc;
 
+					// Jeśli mamy co najmniej 4 bloby, ustaw sBlock na środki blobów
+					// przypisane do czterech narożników obrazu (0,0), (W,0), (0,H), (W,H)
+					// na podstawie najmniejszej odległości.
+					if (nrOfBlobs >= 4)
+					{
+						double pts[8] = {
+							0.0, 0.0,
+							(double)(mWindow->m_depthWidth - 1), 0.0,
+							0.0, (double)(mWindow->m_depthHeight - 1),
+							(double)(mWindow->m_depthWidth - 1), (double)(mWindow->m_depthHeight - 1)
+						};
+
+						for (int j2 = 0; j2 < 4; ++j2)
+						{
+							double* target = pts + j2 * 2;
+							double distMin = 1.0e30;
+							int bPos = 0;
+
+							for (int i2 = 0; i2 < nrOfBlobs; ++i2)
+							{
+								double* cand = blob + i2 * 2;
+								double dist = GetDistance2D(target, cand);
+								if (dist < distMin)
+								{
+									distMin = dist;
+									bPos = i2;
+								}
+							}
+
+							mWindow->sBlock[j2 * 2] = blob[bPos * 2];
+							mWindow->sBlock[j2 * 2 + 1] = blob[bPos * 2 + 1];
+						}
+					}
 
 
 					//if (maxBlobSize > 5000)
@@ -6256,7 +6310,15 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 					p.setPen(Qt::green);
 					p.drawPolygon(poly);
 
-
+					// Czerwone kółka wokół środków wybranych blobów (sBlock)
+					{
+						const int radius = 5;
+						p.setPen(QPen(Qt::red, 2));
+						p.drawEllipse(QPointF(p0[0], p0[1]), radius, radius);
+						p.drawEllipse(QPointF(p1[0], p1[1]), radius, radius);
+						p.drawEllipse(QPointF(p2[0], p2[1]), radius, radius);
+						p.drawEllipse(QPointF(p3[0], p3[1]), radius, radius);
+					}
 
 					p.setPen(Qt::red);
 					/*	double v1[] = { p1[0] - p0[0], p1[1] - p0[1] };
@@ -6302,7 +6364,11 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 					p.drawText(kinectCorners[i * 2] + 5, kinectCorners[i * 2 + 1] + 5, "depth: " + QString::number(d[i]));
 				}
 
-				mWindow->kinectImageWidget->update();
+				qint64 now = QDateTime::currentMSecsSinceEpoch();
+				if (now - mWindow->m_lastKinectPreviewUpdate >= 33) {
+					mWindow->m_lastKinectPreviewUpdate = now;
+					mWindow->kinectImageWidget->update();
+				}
 				//delete[]cropBuffer;
 				//mWindow->depthBuffers[0]->locked = false;//odblokowac
 				mWindow->depthBuffers[0]->mutex.unlock();
@@ -6326,22 +6392,8 @@ void	MainWindow::SloInitKinectDone()
 //----
 void MainWindow::SlotKinectValueChanged0(int val)
 {
-	if (kinect2Init == true)
-	{
-
-		QString filterName = GUIPanel->kinectImagePrefilterComboBox->currentText();
-		QDir rDir(progDirPath);
-		QString filename;
-		if (rDir.cd("filter_compositions"))
-		{
-			QString gr;
-			filename = rDir.absolutePath() + "/" + filterName + ".layers";
-		}
-
-
-		QString filterPreprocessingName = filename;// "filter_compositions/regFilterPreprocessing.layers";
-		kinInit = FiltDram_Initialization(filename.toLocal8Bit(), 640, 480, 1, 1, 0);//
-	}
+	// Kinect 2 nie ma silnika pochylania – suwak angle jest ukryty w GUI, slot bez efektu
+	(void)val;
 }
 
 void MainWindow::SlotOnOffKinectFilter(int val)
@@ -56512,7 +56564,11 @@ void MainWindow::closeEvent(QCloseEvent* event)
 	}
 
 	settings.endGroup();
-	//QProcess::kill();
+
+	if (kinectImageWidget)
+		kinectImageWidget->close();
+	if (statisticsWidget)
+		statisticsWidget->close();
 
 	//if (event!=NULL) 
 

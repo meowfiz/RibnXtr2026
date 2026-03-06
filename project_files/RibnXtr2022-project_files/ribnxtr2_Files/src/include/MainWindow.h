@@ -418,6 +418,7 @@ public:
 	bool sthTest;
 	ImageWidget *kinectImageWidget;
 	ImageWidget *statisticsWidget;
+	qint64 m_lastKinectPreviewUpdate = 0;  // throttle odświeżania podglądu (~30 fps), żeby zmniejszyć „skakanie”
 	bool kinInit = false;
 	bool kinectFiltering = false;
 

@@ -61,7 +61,7 @@ class RawDataLayer;
 
 #define NUMBER_OF_DOCKWIDGETS 21
 #define NUMBER_OF_REG_SLIDERS 9
-#define NUMBER_OF_KIN_SLIDERS 14
+#define NUMBER_OF_KIN_SLIDERS 11
 #define NUMBER_OF_KIN_CHECKBOXES 13
 
 class TextFieldDoubleValidator : public QDoubleValidator {
@@ -173,6 +173,7 @@ public:
 		QComboBox2 *kinectImagePrefilterComboBox;
 		QSlider2 *kinectSlider[NUMBER_OF_KIN_SLIDERS];
 		QSlider2 *kinectBlobRoiSlider[4];  // Blob ROI: minX, maxX, minY, maxY (depth image coords, 0..10000)
+		QSlider2 *kinectMaxSatSlider;      // max saturation dla detekcji blobów (0..255)
 		QLabel *kinectLabel[20];
 		QPushButton2 *kinectFrustumButton;
 		QPushButton2 *kinectCalibrateButton;

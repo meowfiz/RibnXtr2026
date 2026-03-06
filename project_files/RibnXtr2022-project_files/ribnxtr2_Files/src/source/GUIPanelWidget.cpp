@@ -3574,16 +3574,26 @@ qtab->setScrollWidget(PaletteTab);
 	Gb3->setLayout(new QVBoxLayout());
 	Gb3->layout()->setSpacing(1);
 	
-	QString kNames[] = { "angle", "minDepth", "maxDepth", "lightThresh", "xmin", "xmax", "ymin", "ymax", "bckgZoom", "exposure", "focus", "wb", "minBlobSize", "maxBlobSize" };
+	QString kNames[] = { "angle", "minDepth", "maxDepth", "lightThresh", "xmin", "xmax", "ymin", "ymax", "bckgZoom", "minBlobSize", "maxBlobSize" };
+	QLabel *angleLabel = NULL;
 	for (int i = 0; i < 4; i++)
 	{
 		l1 = new QLabel(kNames[i], Gb3);
+		if (i == 0) angleLabel = l1;
 		kinectSlider[i] = new   QSlider2(sliderList,Qt::Horizontal, Gb3);
 		Gb3->layout()->addWidget(l1);
 		Gb3->layout()->addWidget(kinectSlider[i]);
 	}
+	// Kinect 2 nie ma silnika pochylania – ukrywamy suwak angle, indeksy zostają (żeby nie psuć logiki)
+	if (angleLabel) angleLabel->setVisible(false);
+	kinectSlider[0]->setVisible(false);
 
-	// Projector area – 2x2 zamiast 4 suwaków pod sobą
+	l1 = new QLabel(tr("maxSat"), Gb3);
+	kinectMaxSatSlider = new QSlider2(sliderList, Qt::Horizontal, Gb3);
+	Gb3->layout()->addWidget(l1);
+	Gb3->layout()->addWidget(kinectMaxSatSlider);
+
+	// Projector area – 2x2
 	QGroupBox *gbProjector = new QGroupBox(tr("Projector area"), Gb3);
 	QGridLayout *gridProj = new QGridLayout(gbProjector);
 	for (int i = 4; i < 8; i++)
@@ -3598,16 +3608,14 @@ qtab->setScrollWidget(PaletteTab);
 	gridProj->addWidget(kinectSlider[7], 1, 3);
 	Gb3->layout()->addWidget(gbProjector);
 
-	// Pozostałe suwaki (blob / kamera) w jednej zwartej grupie 2×3
+	// Blob / other
 	QGroupBox *gbBlobOther = new QGroupBox(tr("Blob / other"), Gb3);
 	QGridLayout *gridBlobOther = new QGridLayout(gbBlobOther);
 	for (int i = 8; i < NUMBER_OF_KIN_SLIDERS; i++)
 	{
 		kinectSlider[i] = new QSlider2(sliderList, Qt::Horizontal, gbBlobOther);
-		int row = (i - 8) / 2;
-		int col = (i - 8) % 2;
-		gridBlobOther->addWidget(new QLabel(kNames[i], gbBlobOther), row, col * 2);
-		gridBlobOther->addWidget(kinectSlider[i], row, col * 2 + 1);
+		gridBlobOther->addWidget(new QLabel(kNames[i], gbBlobOther), i - 8, 0);
+		gridBlobOther->addWidget(kinectSlider[i], i - 8, 1);
 	}
 	Gb3->layout()->addWidget(gbBlobOther);
 
@@ -3632,28 +3640,24 @@ qtab->setScrollWidget(PaletteTab);
 	
 	}
 
-	kinectSlider[0]->setMinimum(-30);
-	kinectSlider[0]->setMaximum(30);
-	kinectSlider[0]->setValue(0);
-	MainLayout->addWidget(Gb3);
-
-
+	kinectSlider[0]->setMinimum(-30); kinectSlider[0]->setMaximum(30); kinectSlider[0]->setValue(0);
 	kinectSlider[1]->setMinimum(0); kinectSlider[1]->setMaximum(4000); kinectSlider[1]->setValue(0);
 	kinectSlider[2]->setMinimum(0); kinectSlider[2]->setMaximum(4000); kinectSlider[2]->setValue(4000);
-	kinectSlider[3]->setMinimum(1); kinectSlider[3]->setMaximum(255); kinectSlider[3]->setValue(128);
+	kinectSlider[3]->setMinimum(1); kinectSlider[3]->setMaximum(255); kinectSlider[3]->setValue(60);
 
-	//kinectSlider[8]->setMinimum(-100); kinectSlider[3]->setMaximum(255); kinectSlider[2]->setValue(128);
+	MainLayout->addWidget(Gb3);
 
 	for (int i = 4; i < NUMBER_OF_KIN_SLIDERS; i++)
 	{
 		kinectSlider[i]->setMinimum(0); kinectSlider[i]->setMaximum(10000); kinectSlider[i]->setValue(0);
 	}
-	// Projector area: sensowne startowe (np. cały obszar)
 	kinectSlider[5]->setValue(10000);  // xmax
 	kinectSlider[7]->setValue(10000);  // ymax
-	// minBlobSize / maxBlobSize: domyślnie akceptuj małe bloby, bez górnego limitu
-	kinectSlider[12]->setValue(20);    // minBlobSize (odfiltruj szum, ~1.4 px²)
-	kinectSlider[13]->setValue(10000); // maxBlobSize (praktycznie bez limitu)
+	kinectSlider[9]->setValue(20);     // minBlobSize
+	kinectSlider[10]->setValue(10000); // maxBlobSize
+	kinectMaxSatSlider->setMinimum(0);
+	kinectMaxSatSlider->setMaximum(255);
+	kinectMaxSatSlider->setValue(220);
 
 	for (int i = 0; i < 4; i++)
 	{
