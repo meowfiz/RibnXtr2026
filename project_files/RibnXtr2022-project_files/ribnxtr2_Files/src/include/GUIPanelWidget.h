@@ -210,12 +210,16 @@ public:
 	
 	QLineEdit2* maxValueOverrideForDistanceMapLineEdit;
 
-	MyDockWidget *GUIWidgets[NUMBER_OF_DOCKWIDGETS];
+		MyDockWidget *GUIWidgets[NUMBER_OF_DOCKWIDGETS];
 	
-	MyDockWidget *widgetHistory[4];
+		MyDockWidget *widgetHistory[4];
 	//MyDockWidget *lastRightDockWidget,*lastLeftDockWidget,*preLastRightDockWidget,*preLastLeftDockWidget;
 
-	int findMyWidgetPos(MyDockWidget *w);
+		int findMyWidgetPos(MyDockWidget *w);
+
+		// Helpers for persisting/restoring \"maximized\" dock widgets per side.
+		QString getCurrentDockObjectNameForSide(Qt::DockWidgetArea area) const;
+		void restoreCurrentDocksFromNames(const QString& leftName, const QString& rightName);
 
 	GUIPanelWidget(unsigned char * _PalTab, int _PalNr,QList <QString> *names, QList<QPushButton2*>* _buttonList, QList<QCheckBox2*>* _checkBoxList, QList<QComboBox2*>* _comboBoxList,
 		QList<QLineEdit2*>* _lineEditList, QList<QSlider2*>* _sliderList, QList<QSpinBox2*>* _spinBoxList,QWidget *parent=0, double iconFactor=1.0, QString name="");

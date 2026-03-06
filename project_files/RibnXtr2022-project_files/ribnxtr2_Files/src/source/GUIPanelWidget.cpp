@@ -3595,14 +3595,14 @@ qtab->setScrollWidget(PaletteTab);
 
 
 	kinectSlider[1]->setMinimum(0); kinectSlider[1]->setMaximum(4000); kinectSlider[1]->setValue(0);
-	kinectSlider[2]->setMinimum(0); kinectSlider[2]->setMaximum(4000); kinectSlider[2]->setValue(10000);
-	kinectSlider[3]->setMinimum(1); kinectSlider[3]->setMaximum(255); kinectSlider[2]->setValue(128);
+	kinectSlider[2]->setMinimum(0); kinectSlider[2]->setMaximum(4000); kinectSlider[2]->setValue(4000);
+	kinectSlider[3]->setMinimum(1); kinectSlider[3]->setMaximum(255); kinectSlider[3]->setValue(128);
 
 	//kinectSlider[8]->setMinimum(-100); kinectSlider[3]->setMaximum(255); kinectSlider[2]->setValue(128);
 
 	for (int i = 4; i < NUMBER_OF_KIN_SLIDERS; i++)
 	{
-		kinectSlider[i]->setMinimum(0); kinectSlider[i]->setMaximum(10000); kinectSlider[1]->setValue(0);
+		kinectSlider[i]->setMinimum(0); kinectSlider[i]->setMaximum(10000); kinectSlider[i]->setValue(0);
 	}
 
 	//kinectSlider[8]->setMinimum(0); kinectSlider[8]->setMaximum(10000); kinectSlider[8]->setValue(5000);
@@ -10900,6 +10900,46 @@ int GUIPanelWidget::findMyWidgetPos(MyDockWidget *w)
 	}
 	return found;
 
+}
+//-----
+QString GUIPanelWidget::getCurrentDockObjectNameForSide(Qt::DockWidgetArea area) const
+{
+	QMainWindow* mainWindow = qobject_cast<QMainWindow*>(parent());
+	if (!mainWindow)
+		return QString();
+
+	int posCurrent = -1;
+	if (area == Qt::LeftDockWidgetArea)
+		posCurrent = 0;
+	else if (area == Qt::RightDockWidgetArea)
+		posCurrent = 2;
+	else
+		return QString();
+
+	MyDockWidget* current = widgetHistory[posCurrent];
+	if (!current)
+	{
+		// Fallback: first visible dock on given side
+		for (int i = 0; i < NUMBER_OF_DOCKWIDGETS && GUIWidgets[i]; ++i)
+		{
+			if (mainWindow->dockWidgetArea(GUIWidgets[i]) == area &&
+				GUIWidgets[i]->isContentVisible())
+			{
+				current = GUIWidgets[i];
+				break;
+			}
+		}
+	}
+
+	return current ? current->objectName() : QString();
+}
+
+void GUIPanelWidget::restoreCurrentDocksFromNames(const QString& leftName, const QString& rightName)
+{
+	if (!leftName.isEmpty())
+		slotChangeDockWidgetVisibility(leftName);
+	if (!rightName.isEmpty() && rightName != leftName)
+		slotChangeDockWidgetVisibility(rightName);
 }
 //-----
 

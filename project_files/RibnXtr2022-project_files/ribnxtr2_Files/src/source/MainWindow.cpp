@@ -25,10 +25,18 @@ KinectDrawThread::KinectDrawThread(MainWindow* mw)
 //-----------------------------
 void KinectDrawThread::run()
 {
-	while (1)
+	while (!isInterruptionRequested())
 	{
+		// Throttle the loop to avoid busy-spin when Kinect is disabled or frames are not available.
+		if (!mWindow || !mWindow->kinect2Init || !mWindow->kinectEnabled ||
+			(mWindow->GUIPanel && mWindow->GUIPanel->kinectOptionsCheckBox[7]->isChecked()))
+		{
+			QThread::msleep(50);
+			continue;
+		}
+
 		SlotDrawKinectDepthMap();
-		//	msleep(10);
+		QThread::msleep(1);
 	};
 }
 //----------------------
@@ -5323,7 +5331,6 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 				hr = mWindow->m_depthFrameReader->AcquireLatestFrame(&depthFrame);
 				if (FAILED(hr)) return;
 
-				printf("Copying data!\n");
 				hr = depthFrame->CopyFrameDataToArray(
 					mWindow->m_depthWidth * mWindow->m_depthHeight, mWindow->m_depthBuffer);
 
@@ -5376,8 +5383,8 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 
 
 
-				mWindow->GUIPanel->kinectLabel[0]->setText(QString::number(min));
-				mWindow->GUIPanel->kinectLabel[1]->setText(QString::number(max));
+				// Labels updated later (after reading minDepth/maxDepth sliders) to include both
+				// current frame range and slider window in one place.
 
 				//max wyznaczone
 
@@ -5401,6 +5408,13 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 				int mmin = mWindow->GUIPanel->kinectSlider[1]->value();
 				int mmax = mWindow->GUIPanel->kinectSlider[2]->value();
 				if (mmax <= min) return;
+
+				// Show slider window and current frame range without adding new UI objects.
+				// Format: "minDepth <slider> (<frameMin>/<frameMax>)"
+				mWindow->GUIPanel->kinectLabel[0]->setText(
+					"minDepth " + QString::number(mmin) + " (" + QString::number(min) + "/" + QString::number(max) + ")");
+				mWindow->GUIPanel->kinectLabel[1]->setText(
+					"maxDepth " + QString::number(mmax) + " (" + QString::number(min) + "/" + QString::number(max) + ")");
 
 				int range = mmax - mmin;
 
@@ -5458,17 +5472,27 @@ void	KinectDrawThread::SlotDrawKinectDepthMap()
 				{
 					val1 = k_data[i];// mWindow->kinectDepthBuffer16[i];
 
-					if (val1 < mmin) val1 = -1;
-					if (val1 > mmax) val1 = -1;
-
-					if (val1 >= 0)
+					// Clip mode (uses the existing "Time" checkbox):
+					// - outside [minDepth,maxDepth] -> 255 (becomes black after inversion when KinDFlip is OFF)
+					// - inside  [minDepth,maxDepth] -> 0   (becomes white after inversion when KinDFlip is OFF)
+					if (mWindow->GUIPanel->kinectOptionsCheckBox[3]->isChecked())
 					{
-						val = (val1 - mmin) * scaleFactor;
-						col = (val > 255) ? 255 : val;
-						if (col < 0) col = 0;
+						col = (val1 < mmin || val1 > mmax) ? 255 : 0;
 					}
 					else
-						col = 255;
+					{
+						if (val1 < mmin) val1 = -1;
+						if (val1 > mmax) val1 = -1;
+
+						if (val1 >= 0)
+						{
+							val = (val1 - mmin) * scaleFactor;
+							col = (val > 255) ? 255 : val;
+							if (col < 0) col = 0;
+						}
+						else
+							col = 255;
+					}
 					mWindow->ucharBuffer[i] = col;
 					if (val1 > 0)
 					{
@@ -56355,7 +56379,15 @@ void MainWindow::closeEvent(QCloseEvent* event)
 	settings.setValue("geometry", QVariant(geometry()));
 	settings.setValue("windowState", saveState());
 
-
+	if (GUIPanel)
+	{
+		QString leftDock = GUIPanel->getCurrentDockObjectNameForSide(Qt::LeftDockWidgetArea);
+		QString rightDock = GUIPanel->getCurrentDockObjectNameForSide(Qt::RightDockWidgetArea);
+		if (!leftDock.isEmpty())
+			settings.setValue("leftCurrentDock", leftDock);
+		if (!rightDock.isEmpty())
+			settings.setValue("rightCurrentDock", rightDock);
+	}
 
 	settings.endGroup();
 	//QProcess::kill();
@@ -56384,6 +56416,14 @@ void MainWindow::readSettings()
 		setGeometry(settings.value("geometry").value<QRect>());
 
 	restoreState(settings.value("windowState").toByteArray());
+
+	if (GUIPanel)
+	{
+		const QString leftDock = settings.value("leftCurrentDock").toString();
+		const QString rightDock = settings.value("rightCurrentDock").toString();
+		if (!leftDock.isEmpty() || !rightDock.isEmpty())
+			GUIPanel->restoreCurrentDocksFromNames(leftDock, rightDock);
+	}
 	/*restoreGeometry(settings.value("geometry").toByteArray());
 	if (isMaximized())
 		setGeometry(QApplication::desktop()->availableGeometry(this));
