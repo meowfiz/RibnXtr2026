@@ -172,6 +172,7 @@ public:
 		QCheckBox2 *kinectOptionsCheckBox[NUMBER_OF_KIN_CHECKBOXES];
 		QComboBox2 *kinectImagePrefilterComboBox;
 		QSlider2 *kinectSlider[NUMBER_OF_KIN_SLIDERS];
+		QSlider2 *kinectBlobRoiSlider[4];  // Blob ROI: minX, maxX, minY, maxY (depth image coords, 0..10000)
 		QLabel *kinectLabel[20];
 		QPushButton2 *kinectFrustumButton;
 		QPushButton2 *kinectCalibrateButton;

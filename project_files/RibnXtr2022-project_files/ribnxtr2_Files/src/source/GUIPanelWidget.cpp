@@ -2,6 +2,8 @@
 //Added by qt3to4:
 #include <QLabel>
 #include <QPixmap>
+#include <QGridLayout>
+#include <QGroupBox>
 //#include <QVBoxLayout>
 //#include <QMenu>
 
@@ -3573,14 +3575,56 @@ qtab->setScrollWidget(PaletteTab);
 	Gb3->layout()->setSpacing(1);
 	
 	QString kNames[] = { "angle", "minDepth", "maxDepth", "lightThresh", "xmin", "xmax", "ymin", "ymax", "bckgZoom", "exposure", "focus", "wb", "minBlobSize", "maxBlobSize" };
-	for (int i = 0; i < NUMBER_OF_KIN_SLIDERS; i++)
+	for (int i = 0; i < 4; i++)
 	{
-		//l1 = new QLabel("Kinect Param: "+QString::number(i), Gb3);
 		l1 = new QLabel(kNames[i], Gb3);
 		kinectSlider[i] = new   QSlider2(sliderList,Qt::Horizontal, Gb3);
 		Gb3->layout()->addWidget(l1);
 		Gb3->layout()->addWidget(kinectSlider[i]);
 	}
+
+	// Projector area – 2x2 zamiast 4 suwaków pod sobą
+	QGroupBox *gbProjector = new QGroupBox(tr("Projector area"), Gb3);
+	QGridLayout *gridProj = new QGridLayout(gbProjector);
+	for (int i = 4; i < 8; i++)
+		kinectSlider[i] = new QSlider2(sliderList, Qt::Horizontal, gbProjector);
+	gridProj->addWidget(new QLabel("xmin", gbProjector), 0, 0);
+	gridProj->addWidget(kinectSlider[4], 0, 1);
+	gridProj->addWidget(new QLabel("xmax", gbProjector), 0, 2);
+	gridProj->addWidget(kinectSlider[5], 0, 3);
+	gridProj->addWidget(new QLabel("ymin", gbProjector), 1, 0);
+	gridProj->addWidget(kinectSlider[6], 1, 1);
+	gridProj->addWidget(new QLabel("ymax", gbProjector), 1, 2);
+	gridProj->addWidget(kinectSlider[7], 1, 3);
+	Gb3->layout()->addWidget(gbProjector);
+
+	// Pozostałe suwaki (blob / kamera) w jednej zwartej grupie 2×3
+	QGroupBox *gbBlobOther = new QGroupBox(tr("Blob / other"), Gb3);
+	QGridLayout *gridBlobOther = new QGridLayout(gbBlobOther);
+	for (int i = 8; i < NUMBER_OF_KIN_SLIDERS; i++)
+	{
+		kinectSlider[i] = new QSlider2(sliderList, Qt::Horizontal, gbBlobOther);
+		int row = (i - 8) / 2;
+		int col = (i - 8) % 2;
+		gridBlobOther->addWidget(new QLabel(kNames[i], gbBlobOther), row, col * 2);
+		gridBlobOther->addWidget(kinectSlider[i], row, col * 2 + 1);
+	}
+	Gb3->layout()->addWidget(gbBlobOther);
+
+	// Blob ROI – prostokąt ograniczający, gdzie szukać blobów (np. ściana z kartką)
+	QGroupBox *gbBlobRoi = new QGroupBox(tr("Blob ROI"), Gb3);
+	QGridLayout *gridBlob = new QGridLayout(gbBlobRoi);
+	for (int i = 0; i < 4; i++)
+		kinectBlobRoiSlider[i] = new QSlider2(sliderList, Qt::Horizontal, gbBlobRoi);
+	gridBlob->addWidget(new QLabel("minX", gbBlobRoi), 0, 0);
+	gridBlob->addWidget(kinectBlobRoiSlider[0], 0, 1);
+	gridBlob->addWidget(new QLabel("maxX", gbBlobRoi), 0, 2);
+	gridBlob->addWidget(kinectBlobRoiSlider[1], 0, 3);
+	gridBlob->addWidget(new QLabel("minY", gbBlobRoi), 1, 0);
+	gridBlob->addWidget(kinectBlobRoiSlider[2], 1, 1);
+	gridBlob->addWidget(new QLabel("maxY", gbBlobRoi), 1, 2);
+	gridBlob->addWidget(kinectBlobRoiSlider[3], 1, 3);
+	Gb3->layout()->addWidget(gbBlobRoi);
 	for (int i = 0; i < 5; i++)
 	{
 		kinectLabel[i]=new QLabel(".. " + QString::number(i), Gb3);
@@ -3603,6 +3647,19 @@ qtab->setScrollWidget(PaletteTab);
 	for (int i = 4; i < NUMBER_OF_KIN_SLIDERS; i++)
 	{
 		kinectSlider[i]->setMinimum(0); kinectSlider[i]->setMaximum(10000); kinectSlider[i]->setValue(0);
+	}
+	// Projector area: sensowne startowe (np. cały obszar)
+	kinectSlider[5]->setValue(10000);  // xmax
+	kinectSlider[7]->setValue(10000);  // ymax
+	// minBlobSize / maxBlobSize: domyślnie akceptuj małe bloby, bez górnego limitu
+	kinectSlider[12]->setValue(20);    // minBlobSize (odfiltruj szum, ~1.4 px²)
+	kinectSlider[13]->setValue(10000); // maxBlobSize (praktycznie bez limitu)
+
+	for (int i = 0; i < 4; i++)
+	{
+		kinectBlobRoiSlider[i]->setMinimum(0);
+		kinectBlobRoiSlider[i]->setMaximum(10000);
+		kinectBlobRoiSlider[i]->setValue((i == 1 || i == 3) ? 10000 : 0);  // minX=0, maxX=10000, minY=0, maxY=10000
 	}
 
 	//kinectSlider[8]->setMinimum(0); kinectSlider[8]->setMaximum(10000); kinectSlider[8]->setValue(5000);
