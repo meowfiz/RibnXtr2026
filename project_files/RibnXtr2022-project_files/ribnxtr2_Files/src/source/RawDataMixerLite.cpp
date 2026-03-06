@@ -221,9 +221,9 @@ RawDataMixerLite::~RawDataMixerLite()
 	if (uShortTab != NULL) delete[]uShortTab;	uShortTab = NULL;
 	if (doubleTab != NULL) delete[]doubleTab;	doubleTab = NULL;
 
-	if (higFunc != NULL) delete[]shaFunc;
-	if (shaFunc != NULL) delete[]higFunc;
-	if (midFunc != NULL) delete[]midFunc;
+	if (higFunc != NULL) { delete[] higFunc; higFunc = NULL; }
+	if (shaFunc != NULL) { delete[] shaFunc; shaFunc = NULL; }
+	if (midFunc != NULL) { delete[] midFunc; midFunc = NULL; }
 
 }
 //----------------------------
@@ -949,6 +949,15 @@ unsigned short * RawDataMixerLite::SlotGenerateMixedSliceImage(int sliceNumber, 
 				maskMode = layer->GetMaskFilterMode();
 				filterMode = layer->GetFilterMode();
 
+				// Clamp modes to valid ranges to avoid out-of-bounds access
+				const int maxMixModes = 16; // MixFunction[0..15]
+				if (mixMode < 0 || mixMode >= maxMixModes)
+					mixMode = 0;
+				if (maskMode < 0 || maskMode >= layerMaskFilterList->GetNumberOfItems())
+					maskMode = 0;
+				if (filterMode < 0 || filterMode >= layerFilterList->GetNumberOfItems())
+					filterMode = 0;
+
 
 				int dataSetNumber = layer->GetDataSetNumber();
 				if (dataSetNumber == 0)
@@ -1234,7 +1243,7 @@ unsigned short * RawDataMixerLite::SlotGenerateMixedSliceImage(int sliceNumber, 
 
 								layerMaskFilter->SetBrightnessTabs(funSize, higFunc, midFunc, shaFunc);
 
-								//2016.10.16 - du¿a zmiana!!!! - nie bedzie zrodlem danych dla maski cos innego niz dla danej warstwy - jesli chce cos innego to biore maske z warstwy innej!! mask number
+								//2016.10.16 - dua zmiana!!!! - nie bedzie zrodlem danych dla maski cos innego niz dla danej warstwy - jesli chce cos innego to biore maske z warstwy innej!! mask number
 								RawDataSet *tmpData = dataToFilter;
 								//	RawDataSet *tmpData = (nrr == 0) ? dataToFilter:rawDataLayerList->GetItemAtPos(nrr-1)->GetData()->getFilterBufferData(viewType);
 								//  jesli nrr==0 to znaczy ze zrodlem dla filtra maski ma byc to samo co dla filtra danych
@@ -1314,7 +1323,10 @@ unsigned short * RawDataMixerLite::SlotGenerateMixedSliceImage(int sliceNumber, 
 							mask = rawDataLayerList->GetItemAtPos(nrMask - 1)->GetData()->getMaskBuffer(viewType);
 						}
 						else
-							layer->getMaskBuffer(viewType);
+						{
+							// domy?lnie u?ywamy maski tej warstwy, je?li nie wskazano innej
+							mask = layer->getMaskBuffer(viewType);
+						}
 
 
 					}

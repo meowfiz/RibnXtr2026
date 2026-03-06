@@ -134,7 +134,7 @@ protected:
 
 
 	unsigned short MixFunction0(unsigned short a, unsigned short b) { return b; };																					//normal
-	unsigned short MixFunction1(unsigned short a, unsigned short b) { return (a + b) >> 2; };																		//average
+	unsigned short MixFunction1(unsigned short a, unsigned short b) { return (a + b) >> 1; };																		//average
 	unsigned short MixFunction2(unsigned short a, unsigned short b) { int val = (a*b) >> 8; return val;/*(val<256)?val:255;*/ };									//multiply
 	unsigned short MixFunction3(unsigned short a, unsigned short b) { return 65535 - ((65535 - a) * (65535 - b) >> 16); };														//screen
 	unsigned short MixFunction4(unsigned short a, unsigned short b) { return (a<b) ? a : b; };																			//darken
