@@ -48,3 +48,6 @@ Wczytaj wolumen .rdata w aplikacji (żeby data != NULL).
 Kliknij GenerateMaskUsingJadraSegmentatorButton w zakładce segmentacji.
 Skrypt zapisze *.jadra.mask obok *.rdata, a aplikacja go wczyta (musi mieć dokładnie volumeSize bajtów).
 Jeśli po kliknięciu dostaniesz komunikat o brakującej konfiguracji albo “script not found”, podeślij jak masz ustawiony working directory uruchamiania (VS/VSCode/CMake), wtedy dopniemy rozwiązywanie ścieżek na 100% pod Twoje uruchomienie.
+
+---
+**Commity:** Po zakończeniu logicznego bloku zmian (zmiana tematu, udana implementacja) asystent sam robi commit z krótkim opisem. Większe zmiany dziel na kilka commitów (np. GUI / logika / config osobno).
