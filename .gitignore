@@ -33,6 +33,8 @@ project_files/RibnXtr2022-project_files/ribnxtr2_Files/run_files/.RibonXDefaultD
 # local runtime configs
 project_files/**/run_files/config.ini
 project_files/**/run_files/geom_config.ini
+# Kinect runtime background grab (nie wersjonujemy)
+project_files/**/run_files/kinect_background_*.bin
 
 # Python cache / bytecode
 __pycache__/
