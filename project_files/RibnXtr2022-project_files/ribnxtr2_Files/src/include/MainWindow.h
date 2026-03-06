@@ -476,9 +476,9 @@ public:
 	vtkLookupTable* maskLut;
 	
 	
-	KinectDrawThread *kinectThread;
-	KinectDraw3DThread *kinect3DThread;
-	CameraDrawThread *cameraThread;
+	KinectDrawThread *kinectThread = nullptr;
+	KinectDraw3DThread *kinect3DThread = nullptr;
+	CameraDrawThread *cameraThread = nullptr;
 
 	int segMode;
 	int prevTimeVal;

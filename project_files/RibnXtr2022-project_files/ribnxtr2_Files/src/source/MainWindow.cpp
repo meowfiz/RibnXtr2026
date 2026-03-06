@@ -1,6 +1,8 @@
 #include	"MainWindow.h"
 //Added by qt3to4:
 #include <QMutexLocker>
+#include <QMetaObject>
+#include <QDateTime>
 #include <QPolygon>
 #include <QMouseEvent>
 //#include <QVBoxLayout>
@@ -48,7 +50,7 @@ KinectDraw3DThread::KinectDraw3DThread(MainWindow* mw)
 //-----------------------------
 void KinectDraw3DThread::run()
 {
-	while (1)
+	while (!isInterruptionRequested())
 	{
 		SlotRenderKinectDepthMap();
 		int tt = mWindow->VWidget->Renderer->GetLastRenderTimeInSeconds() * 1000.0;
@@ -57,7 +59,7 @@ void KinectDraw3DThread::run()
 			msleep(10);
 		else
 			msleep(tt);
-	};
+	}
 }
 //----------------------------
 DepthBuffer::DepthBuffer()
@@ -4985,24 +4987,17 @@ void	MainWindow::SlotKinectEnable(int aa)
 			/*m_kinect->toggleDepthState(true);
 			m_kinect->toggleVideoState(true);*/
 		}
-		//initKinectDone = true;
-
-		//if (m_kinect != NULL)
-		{
-
-			/*connect(kinectTimer, SIGNAL(timeout()), this, SLOT(SlotDrawKinectDepthMap()));
-			kinectTimer->setInterval(200);
-			kinectTimer->start(false);
-			kinectEnabled = true;
-
-			connect(kinectTimer3D, SIGNAL(timeout()), this, SLOT(SlotRenderKinectDepthMap()));
-			kinectTimer3D->setInterval(200);
-			kinectTimer3D->start(false);*/
-
-		}
+		// Uruchom wątek 3D (Volume Mask) – bez niego SlotRenderKinectDepthMap() nigdy się nie wywołuje
+		if (kinect3DThread != NULL && !kinect3DThread->isRunning())
+			kinect3DThread->start();
 	}
 	else //wy��cz
 	{
+		if (kinect3DThread != NULL && kinect3DThread->isRunning())
+		{
+			kinect3DThread->requestInterruption();
+			kinect3DThread->wait();
+		}
 		QObject::disconnect(GUIPanel->kinectSlider[0], SIGNAL(valueChanged(int)), this, SLOT(SlotKinectValueChanged0(int)));
 
 		//QObject::disconnect(m_kinect, SIGNAL(signalFrameSent()), this, SLOT(SloInitKinectDone()));
@@ -5165,167 +5160,87 @@ void	MainWindow::SlotUpdateArterySettings(bool)
 //--------------------------------------------
 void	KinectDraw3DThread::SlotRenderKinectDepthMap()
 {
-	//	if ((mWindow->data == NULL) || (mWindow->MaskData == NULL)) return;
-	//	GUIPanelWidget *GUIPanel = mWindow->GUIPanel;
-	//	bool m_kinect = mWindow->m_kinect;
-	//	bool initKinectDone = mWindow->initKinectDone;
-	//	bool kinectStop = mWindow->kinectStop;
-	//	bool stop = GUIPanel->kinectOptionsCheckBox[7]->isChecked();
-	//
-	//	int homographyLookupSize = mWindow->homographyLookupSize;
-	//	unsigned short *homographyLookup = mWindow->homographyLookup;
-	//
-	//
-	//	if (stop == false)
-	//		if ((m_kinect != NULL))
-	//		{
-	//			if ((initKinectDone == true) && (kinectStop == false))
-	//			{
-	//
-	//				bool maskVol = GUIPanel->kinectOptionsCheckBox[2]->isChecked();
-	//				//&& (maskVol == true)
-	//				if ((mWindow->isVolumeVisible == true) && (mWindow->MaskVolumeStructuredPoints != NULL) && (mWindow->zPosDepthBigTab != NULL))
-	//				{
-	//
-	//
-	//					//wyznaczam dest buffer
-	//
-	//					int bnr = DEPTH_BUFFERS_NR;
-	//
-	//					bool isLocked = true;
-	//
-	//					DepthBuffer *dBuffer = NULL;
-	//
-	//					DepthBuffer **depthBuffers = mWindow->depthBuffers;
-	//					do
-	//					{
-	//						isLocked = true;
-	//						//tmpBuffer = depthBuffers[bnr - 1];
-	//						for (int i = 0; i < bnr; i++)
-	//						{
-	//							if ((mWindow->kinectRender3DID <= (depthBuffers[i]->timeID)))
-	//								if (depthBuffers[i]->mutex.tryLock())
-	//								{
-	//
-	//
-	//
-	//
-	//
-	//
-	//									//if ((depthBuffers[i]->locked == false) && 
-	//
-	//
-	//									dBuffer = depthBuffers[i];
-	//									dBuffer->locked = true;//zablokuj
-	//									mWindow->kinectRender3DID = dBuffer->timeID;
-	//									isLocked = false;
-	//									break;
-	//
-	//								}
-	//						}
-	//
-	//						//depthBuffers[0] = tmpBuffer;
-	//						//if (depthBuffers[0]->locked == false)
-	//						//{
-	//						//	isLocked = false;
-	//						//	depthBuffers[0]->locked = true;//zablokuj bo tu bedziesz pisal
-	//						//	depthBuffers[0]->timeID = QTime::currentTime().msec();
-	//						//}
-	//					} while (isLocked == true);
-	//
-	//					unsigned char *destBuffer = dBuffer->buffer;
-	//					int n[3];
-	//					mWindow->data->GetN(n);
-	//					double scalex = 640.0 / n[0];
-	//					double scaley = 480.0 / n[2];
-	//					int mmin = GUIPanel->kinectSlider[1]->value();
-	//					int mmax = GUIPanel->kinectSlider[2]->value();
-	//					if (mmax <= dBuffer->min) return;
-	//
-	//					int range = mmax - mmin;
-	//
-	//					double scaleFactor = (n[1] - 1)*1.0 / range;
-	//					//	for (k = 0; k < data->GetNz();; k++)
-	//					int vs = mWindow->data->GetVolumeSize();
-	//
-	//					/*	double ssx = 640.0 / 65535;
-	//					double ssy = 480.0 / 65535;*/
-	//					double ssx = homographyLookupSize / 65535.0;
-	//					double ssy = homographyLookupSize / 65535.0;
-	//					int pos = 0;
-	//					int ss = mWindow->data->GetSliceSize();
-	//					int k;
-	//					unsigned char *tmpMask = mWindow->tmpMask;
-	//					unsigned short *yPosDepthBigTab = mWindow->yPosDepthBigTab;
-	//					unsigned short *xPosDepthBigTab = mWindow->xPosDepthBigTab;
-	//					unsigned char *zPosDepthBigTab = mWindow->zPosDepthBigTab;
-	//					unsigned char *MaskData = mWindow->MaskData;
-	//
-	//					tmpMask = (tmpMask == mWindow->MaskData) ? mWindow->maskData1 : mWindow->MaskData;
-	//#pragma omp parallel  num_threads(GUIPanel->imgMatchOptSlider[7]->value()) 
-	//#pragma omp for   ordered schedule (guided) private(k)
-	//
-	//					//int xa1, ya1;
-	//					for (k = 0; k < n[2]; k++)
-	//					{
-	//						int pos = k*ss;
-	//						for (int j = 0; j < n[1] * n[0]; j++)
-	//						{
-	//							//for (int i = 0; i < n[0]; i++)
-	//							{
-	//
-	//								int xa = xPosDepthBigTab[pos] * ssx;
-	//								int ya = yPosDepthBigTab[pos] * ssy;
-	//
-	//								//wyliczam przejscie z homografii
-	//								int xa1 = homographyLookup[(xa + homographyLookupSize*ya) * 2];
-	//								int ya1 = homographyLookup[(xa + homographyLookupSize*ya) * 2 + 1];
-	//
-	//
-	//
-	//								int depth = zPosDepthBigTab[pos];
-	//
-	//								//int val = 255 - finalBuffer[xa + ya * 640];
-	//								int val = destBuffer[xa1 + ya1 * 640];/////////////////////
-	//
-	//								//int val = 0;
-	//
-	//								MaskData[pos] = ((depth > val) || (val == 255)) ? 255 : 0;
-	//
-	//
-	//
-	//								pos++;
-	//							}
-	//						}
-	//					}
-	//
-	//
-	//					dBuffer->locked = false;//odblokuj
-	//					dBuffer->mutex.unlock();
-	//
-	//
-	//
-	//					//mWindow->MaskVolumeStructuredPoints->GetPointData()->GetScalars()->SetVoidArray(tmpMask, mWindow->data->GetVolumeSize(), 1);
-	//				//	mWindow->MaskVolumeStructuredPoints->Modified();
-	//
-	//
-	//
-	//				/*	mWindow->VolumeMapper->SetMaskInput(mWindow->MaskVolumeStructuredPoints);
-	//					mWindow->VolumeMapper->Modified();*/
-	//
-	//					//mWindow->VolumeMapper->Update();
-	//					if (mWindow->Volume->GetMapper() != NULL)
-	//					{
-	//						//mWindow->Volume->Modified();
-	//					//	mWindow->VolumeMapper->UpdateExtent();
-	//
-	//						mWindow->MaskVolumeStructuredPoints->Modified();
-	//						mWindow->VWidget->Interactor->update();
-	//					}
-	//
-	//				}
-	//			}
-	//		}
+	if (mWindow->data == NULL || mWindow->MaskData == NULL) return;
+	GUIPanelWidget *GUIPanel = mWindow->GUIPanel;
+	if (!GUIPanel) return;
+	bool stop = GUIPanel->kinectOptionsCheckBox[7]->isChecked();
+	if (stop || !mWindow->kinect2Init) return;
+
+	int homographyLookupSize = mWindow->homographyLookupSize;
+	unsigned short *homographyLookup = mWindow->homographyLookup;
+	if (homographyLookup == NULL) return;
+
+	bool maskVol = GUIPanel->kinectOptionsCheckBox[2]->isChecked();
+	if (!maskVol || !mWindow->isVolumeVisible || mWindow->MaskVolumeStructuredPoints == NULL || mWindow->zPosDepthBigTab == NULL)
+		return;
+
+	DepthBuffer **depthBuffers = mWindow->depthBuffers;
+	if (depthBuffers == NULL) return;
+	if (!depthBuffers[0]->mutex.tryLock())
+		return;
+	unsigned char *destBuffer = depthBuffers[0]->buffer;
+	int dW = mWindow->m_depthWidth;
+	int dH = mWindow->m_depthHeight;
+	if (dW <= 0) dW = 512;
+	if (dH <= 0) dH = 424;
+	int depthPitch = dW;
+
+	int n[3];
+	mWindow->data->GetN(n);
+	int ss = mWindow->data->GetSliceSize();
+	int volSize = mWindow->data->GetVolumeSize();
+	double ssx = homographyLookupSize / 65535.0;
+	double ssy = homographyLookupSize / 65535.0;
+	unsigned short *xPosDepthBigTab = mWindow->xPosDepthBigTab;
+	unsigned short *yPosDepthBigTab = mWindow->yPosDepthBigTab;
+	unsigned char *zPosDepthBigTab = mWindow->zPosDepthBigTab;
+	unsigned char *MaskData = mWindow->MaskData;
+
+	int hls = homographyLookupSize - 1;
+	int maskedCount = 0;
+	for (int k = 0; k < n[2]; k++)
+	{
+		int pos = k * ss;
+		for (int j = 0; j < n[1] * n[0]; j++, pos++)
+		{
+			int xa = (int)(xPosDepthBigTab[pos] * ssx);
+			int ya = (int)(yPosDepthBigTab[pos] * ssy);
+			xa = qBound(0, xa, hls);
+			ya = qBound(0, ya, hls);
+			int idx = (xa + homographyLookupSize * ya) * 2;
+			int xa1 = (int)homographyLookup[idx];
+			int ya1 = (int)homographyLookup[idx + 1];
+			xa1 = qBound(0, xa1, dW - 1);
+			ya1 = qBound(0, ya1, dH - 1);
+			int depth = (int)zPosDepthBigTab[pos];
+			int val = destBuffer[xa1 + ya1 * depthPitch];
+			unsigned char m = ((depth > val) || (val == 255)) ? (unsigned char)255 : (unsigned char)0;
+			MaskData[pos] = m;
+			if (m == 255) maskedCount++;
+		}
+	}
+
+	depthBuffers[0]->mutex.unlock();
+
+	// Log co ~2 s do okna logera, żeby sprawdzić czy cokolwiek się dzieje (bez zalewania)
+	static qint64 lastLogMs = 0;
+	qint64 nowMs = QDateTime::currentMSecsSinceEpoch();
+	if (nowMs - lastLogMs >= 2000)
+	{
+		lastLogMs = nowMs;
+		QString msg = QString("[Kinect VolMask] voxels masked=%1 total=%2 (%3%)")
+			.arg(maskedCount).arg(volSize).arg(volSize > 0 ? (100.0 * maskedCount / volSize) : 0, 0, 'f', 1);
+		QMetaObject::invokeMethod(mWindow, "SlotAddLogText2", Qt::QueuedConnection, Q_ARG(QString, msg));
+	}
+
+	if (mWindow->Volume->GetMapper() != NULL)
+	{
+		mWindow->MaskVolumeStructuredPoints->Modified();
+		// Gdy Volume Mask (Kinect) jest włączony – wymuś użycie maski w 3D (bez szukania checkboxa „3DVis”)
+		mWindow->VolumeMapper->SetMaskInput(mWindow->MaskVolumeStructuredPoints);
+		mWindow->VolumeMapper->Modified();
+		mWindow->VWidget->Interactor->update();
+	}
 }
 //-----------------------------------------
 
@@ -6525,7 +6440,13 @@ MainWindow::~MainWindow()
 	}
 	if (kinect3DThread != NULL)
 	{
-		kinect3DThread->terminate();
+		if (kinect3DThread->isRunning())
+		{
+			kinect3DThread->requestInterruption();
+			kinect3DThread->wait();
+		}
+		delete kinect3DThread;
+		kinect3DThread = NULL;
 	}
 	if (cameraThread != NULL)
 	{
@@ -54206,6 +54127,57 @@ void	MainWindow::SlotCreateMaskFromBarrier()
 //----------------------------------------------
 void MainWindow::SlotKinectFrustumGen()
 {
+	if (data == NULL) return;
+	if (!kinect2Init) return;
+	if (GUIPanel->kinectOptionsCheckBox[7]->isChecked()) return;  // Stop
+
+	int nn[3];
+	data->GetN(nn);
+	int volSize = data->GetVolumeSize();
+	if (volSize <= 0) return;
+
+	int dW = m_depthWidth;
+	int dH = m_depthHeight;
+	if (dW <= 0) dW = 512;
+	if (dH <= 0) dH = 424;
+
+	// Alokacja / realokacja tablic mapowania wolumen -> obraz depth (z poprawką: != zamiast =)
+	if (depthBigTabSize != volSize)
+	{
+		if (xPosDepthBigTab != NULL) { delete[] xPosDepthBigTab; xPosDepthBigTab = NULL; }
+		if (yPosDepthBigTab != NULL) { delete[] yPosDepthBigTab; yPosDepthBigTab = NULL; }
+		if (zPosDepthBigTab != NULL) { delete[] zPosDepthBigTab; zPosDepthBigTab = NULL; }
+		if (maskData1 != NULL) { delete[] maskData1; maskData1 = NULL; }
+		depthBigTabSize = 0;
+	}
+	if (depthBigTabSize == 0)
+	{
+		depthBigTabSize = volSize;
+		xPosDepthBigTab = new unsigned short[volSize];
+		yPosDepthBigTab = new unsigned short[volSize];
+		zPosDepthBigTab = new unsigned char[volSize];
+		maskData1 = new unsigned char[volSize];
+	}
+
+	// Uproszczone mapowanie: woksel (i,j,k) -> współrzędne w przestrzeni lookup 0..65535 (potem homografia -> depth)
+	// Pełna wersja VTK (projekcja viewport) do przywrócenia później.
+	const int nx = nn[0], ny = nn[1], nz = nn[2];
+	const double scaleX = (nx > 1) ? (65535.0 / (nx - 1)) : 0;
+	const double scaleY = (nz > 1) ? (65535.0 / (nz - 1)) : 0;
+	int pos = 0;
+	for (int k = 0; k < nz; k++)
+		for (int j = 0; j < ny; j++)
+			for (int i = 0; i < nx; i++, pos++)
+			{
+				xPosDepthBigTab[pos] = (unsigned short)(i * scaleX);
+				yPosDepthBigTab[pos] = (unsigned short)(k * scaleY);
+				zPosDepthBigTab[pos] = (unsigned char)(k * 255 / qMax(1, nz - 1));
+			}
+
+	CustomBox2Update();
+}
+#if 0
+	// Stara implementacja VTK (do ewentualnego przywrócenia):
 	//	if ((m_kinect != NULL))
 	//	{
 	//		if ((GUIPanel->kinectOptionsCheckBox[7]->isChecked() == false))
@@ -55114,7 +55086,7 @@ void MainWindow::SlotKinectFrustumGen()
 	//
 	//			}
 	//	}
-}
+#endif
 //-------------------------
 void MainWindow::SlotGrabBackgroundDepth()
 {
