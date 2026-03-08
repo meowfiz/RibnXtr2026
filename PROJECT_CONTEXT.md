@@ -51,3 +51,5 @@ Jeśli po kliknięciu dostaniesz komunikat o brakującej konfiguracji albo “sc
 
 ---
 **Commity:** Po zakończeniu logicznego bloku zmian (zmiana tematu, udana implementacja) asystent sam robi commit z krótkim opisem. Większe zmiany dziel na kilka commitów (np. GUI / logika / config osobno).
+
+**Ścieżki i literówki:** Gdy użytkownik podaje ścieżkę (np. katalog, plik) i możliwa jest literówka (np. spacja zamiast podkreślnika: "startup images" vs "startup_images") – asystent sprawdza, czy w projekcie lub w typowych lokalizacjach istnieje wersja z inną pisownią (np. folder startup_images), i w razie potrzeby proponuje poprawkę zamiast bezrefleksyjnie używać podanego tekstu.

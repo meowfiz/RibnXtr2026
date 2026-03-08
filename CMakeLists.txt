@@ -121,5 +121,4 @@ target_link_libraries(RibnXtr2023 PRIVATE
 # ---- VS debugger working dir ----
 if(MSVC)
   set_property(TARGET RibnXtr2023 PROPERTY VS_DEBUGGER_WORKING_DIRECTORY "${RUN_DIR}")
-  set_target_properties(RibnXtr2023 PROPERTIES LINK_FLAGS "/SUBSYSTEM:CONSOLE")
 endif()

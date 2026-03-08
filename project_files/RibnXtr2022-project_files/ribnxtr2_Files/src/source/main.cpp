@@ -18,6 +18,14 @@
 //#include <QVTKOpenGLWidget.h>
 #include "MainWindow.h"
 #include "PropertyWidget.h"
+#include <QDir>
+#include <QLabel>
+#include <QPixmap>
+#include <QPainter>
+#include <QScreen>
+#include <QWidget>
+#include <cstdlib>
+#include <QDateTime>
 #include <vtkProperty.h>
 
 #include <stdio.h>
@@ -614,15 +622,76 @@ int main(int argc, char** argv)
 	palette.setColor(QPalette::Disabled, QPalette::ButtonText, Qt::darkGray);
 	app.setPalette(palette);
 
-
+	// Splash – osobne okno na wierzchu, na środku ekranu; znika gdy główne okno jest gotowe (bez sztucznego opóźnienia)
+	const int splashW = 900, splashH = 560;
+	QPixmap splashPix;
+	QDir startupDir;
+	QString appDir = QApplication::applicationDirPath();
+	QStringList tryPaths;
+	tryPaths << (appDir + "/startup_images")
+	         << (appDir + "/images/startup_images")
+	         << (appDir + "/../run_files/images/startup_images")
+	         << (appDir + "/../../run_files/images/startup_images")
+	         << (appDir + "/../../project_files/RibnXtr2022-project_files/ribnxtr2_Files/run_files/images/startup_images")
+	         << "startup_images"
+	         << "images/startup_images"
+	         << "run_files/images/startup_images"
+	         << "project_files/RibnXtr2022-project_files/ribnxtr2_Files/run_files/images/startup_images";
+	for (const QString& p : tryPaths)
+	{
+		startupDir.setPath(p);
+		if (startupDir.exists())
+			break;
+	}
+	if (startupDir.exists())
+	{
+		QStringList filters;
+		filters << "*.png" << "*.jpg" << "*.jpeg";
+		QStringList files = startupDir.entryList(filters, QDir::Files | QDir::Readable, QDir::Name);
+		if (!files.isEmpty())
+		{
+			std::srand((unsigned int)QDateTime::currentMSecsSinceEpoch());
+			int idx = std::rand() % files.size();
+			splashPix.load(startupDir.absoluteFilePath(files.at(idx)));
+		}
+	}
+	if (splashPix.isNull())
+	{
+		splashPix = QPixmap(splashW, splashH);
+		splashPix.fill(QColor(26, 26, 46));
+		QPainter sp(&splashPix);
+		sp.setRenderHint(QPainter::TextAntialiasing);
+		sp.setPen(Qt::white);
+		QFont sf = sp.font();
+		sf.setPointSize(56);
+		sp.setFont(sf);
+		sp.drawText(QRect(0, 0, splashW, splashH - 120), Qt::AlignCenter | Qt::AlignBottom, QString("RibnXtr"));
+		sf.setPointSize(14);
+		sp.setFont(sf);
+		sp.setPen(QColor(180, 180, 180));
+		sp.drawText(QRect(0, splashH - 100, splashW, 40), Qt::AlignCenter, QString("RibnXtr2026  ") + QString(__DATE__).simplified());
+		sp.drawText(QRect(0, splashH - 58, splashW, 36), Qt::AlignCenter, QString("by Michal Chlebiej"));
+		sp.end();
+	}
+	QWidget splashWin;
+	splashWin.setWindowFlags(Qt::SplashScreen | Qt::FramelessWindowHint);
+	splashWin.setStyleSheet("background-color: #1a1a2e;");
+	QLabel splashLabel(&splashWin);
+	splashLabel.setPixmap(splashPix.scaled(splashW, splashH, Qt::KeepAspectRatio, Qt::SmoothTransformation));
+	splashLabel.setAlignment(Qt::AlignCenter);
+	splashLabel.setStyleSheet("background-color: #1a1a2e;");
+	splashLabel.setGeometry(0, 0, splashW, splashH);
+	splashWin.setFixedSize(splashW, splashH);
+	QScreen* screen = QApplication::primaryScreen();
+	if (screen)
+	{
+		QRect r = screen->availableGeometry();
+		splashWin.move(r.x() + (r.width() - splashW) / 2, r.y() + (r.height() - splashH) / 2);
+	}
+	splashWin.show();
 
 	MainWindow pWindow(modex);
 	app.setActiveWindow(&pWindow);
-
-
-
-
-	//w.show();
 
 	QString filename;
 	int nrOfArgs = argc;
@@ -633,19 +702,13 @@ int main(int argc, char** argv)
 		{
 			filename = argv[i];
 			pWindow.SlotLoadUniversalData(filename);
-			//  if ( !filename.endsWith( ".cht" ) )
-			  //    filename = QString::null;
 		}
 	}
 
-	//QString style1(" QSplitter::handle {bacground: black};");
-	//app.setStyleSheet(style1);
-	//app.setStyleSheet(QString("QWidget {background: darkgray; color: white;}"));
+	splashWin.close();
+	pWindow.show();
+
 	app.connect(&app, SIGNAL(lastWindowClosed()), &app, SLOT(quit()));
-
-
-	//--------------------------------------
-
 
 	return app.exec();
 

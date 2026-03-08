@@ -3,6 +3,8 @@
 #include <QMutexLocker>
 #include <QMetaObject>
 #include <QDateTime>
+#include <QDir>
+#include <QTimer>
 #include <QPolygon>
 #include <QMouseEvent>
 //#include <QVBoxLayout>
@@ -14,6 +16,8 @@
 //#include <QTextStream>
 #include <QDragEnterEvent>
 #include <QPixmap>
+#include <QPainter>
+#include <QScreen>
 #include <QKeyEvent>
 //nic
 //#include "PaletteDefs.h"
@@ -1478,7 +1482,7 @@ MainWindow::MainWindow(int modex, QWidget* parent, const char* name, Qt::WindowF
 
 
 	PosX = 0; PosY = 0; PosZ = 0;
-	ScatterImageWidget = new ImageWidget(0);//0,"",WStyle_Tool );//| WStyle_StaysOnTop);
+	ScatterImageWidget = new ImageWidget(this);
 	ScatterImageWidget->setGeometry(50, 50, 256, 256);
 	ScatterImageWidget->raise();
 	ScatterImageWidget->SlotSetSendMaskMode(true);
@@ -2227,7 +2231,7 @@ MainWindow::MainWindow(int modex, QWidget* parent, const char* name, Qt::WindowF
 	OtherMenu->addSeparator();
 	//OtherMenu->addAction("Reset Camera",13);
 	//OtherMenu->setAccel( Qt::Key_R,13);
-	VWidget = new	VtkWidget(NULL, "3D Widnow");
+	VWidget = new VtkWidget(this, "3D Window");
 
 
 
@@ -4160,7 +4164,7 @@ MainWindow::MainWindow(int modex, QWidget* parent, const char* name, Qt::WindowF
 	SlotSetCameraSetting(2);
 
 	readSettings();
-	this->show();
+	// this->show() przeniesione na koniec konstruktora – okno pokazywane dopiero po pełnej inicjalizacji (bez pustego „szarego” okna)
 
 
 	SlotUpdatePointerSize(15);
@@ -4768,6 +4772,13 @@ MainWindow::MainWindow(int modex, QWidget* parent, const char* name, Qt::WindowF
 	//	if (GUIPanel->autoRestartAppCheckBox->isChecked()) restartAppMode = true;//ma sie wywalac przy escape
 
 	//	connect(GUIPanel->autoRestartAppCheckBox, SIGNAL(stateChanged(int)), this, SLOT(SetRestartAppMode(int)));
+
+	// Okno pokazane dopiero z main() po zamknięciu splash.
+}
+//-------------------
+void MainWindow::showEvent(QShowEvent *event)
+{
+	QMainWindow::showEvent(event);
 }
 //-------------------
 void MainWindow::SetRestartAppMode(int mode)
@@ -56615,6 +56626,17 @@ void MainWindow::readSettings()
 
 	if (settings.contains("geometry"))
 		setGeometry(settings.value("geometry").value<QRect>());
+	else
+	{
+		// Brak zapisanej geometrii – okno na środku ekranu; potem użytkownik może zmaksymalizować i zapisze (config)
+		resize(1200, 800);
+		QScreen* screen = QApplication::primaryScreen();
+		if (screen)
+		{
+			QRect available = screen->availableGeometry();
+			move(available.x() + (available.width() - width()) / 2, available.y() + (available.height() - height()) / 2);
+		}
+	}
 
 	restoreState(settings.value("windowState").toByteArray());
 

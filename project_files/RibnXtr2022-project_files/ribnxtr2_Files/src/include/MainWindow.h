@@ -348,7 +348,11 @@ public:
 
 	//(unsigned char *_Pal,int _PalNr,QMenuBar *Menu,
 	~MainWindow();
-	
+
+protected:
+	void showEvent(QShowEvent *event) override;
+
+public:
 	vtkRenderer *renderer;
 	vtkRenderWindow *renWin;
 	bool disable3DUpdateFilter;
